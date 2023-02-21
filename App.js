@@ -1,27 +1,37 @@
-import React, { Component } from 'react';
+import { React, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { useFonts } from 'expo-font';
+export default function App() {
+  // const handleGetStarted = () => {
+  //   //next screen
+  //   console.log("something...");
+  // };
+  const [fontsLoaded] = useFonts({
+    'Montserrat': require('./assets/fonts/Montserrat-VariableFont_wght.ttf'),
+  });
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-class StarterScreen extends Component {
-  handleGetStarted = () => {
-    // Add any necessary code to navigate to the next screen
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image source={require('./assets/starter_icon.png')} style={styles.image} />
-        <Text style={styles.heading}>
-          Welcome to DormDeals
-        </Text>
-        <Text style={styles.description}>
-          Buy, Sell or donate your old hostel stuff with just a few clicks. It's that easy!
-        </Text>
-        <TouchableOpacity style={styles.button} onPress={this.handleGetStarted}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  if (!fontsLoaded) {
+    return null;
   }
+  return (
+    <View style={styles.container}>
+      <Image source={require('./assets/starter_icon.png')} style={styles.image} />
+      <Text style={styles.heading}>
+        Welcome to DormDeals
+      </Text>
+      <Text style={styles.description}>
+        Buy, Sell or donate your old hostel stuff with just a few clicks. It's that easy!
+      </Text>
+      <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
+        <Text style={styles.buttonText}>Get Started</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -38,6 +48,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heading: {
+    fontFamily: 'Montserrat',
     fontSize: 30,
     fontWeight: 'bold',
     marginTop: 110,
@@ -59,4 +70,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StarterScreen;
