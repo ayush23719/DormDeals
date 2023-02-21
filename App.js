@@ -9,9 +9,12 @@ class StarterScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={require('./assets/image.png')} style={styles.image} />
+        <Image source={require('./assets/starter_icon.png')} style={styles.image} />
+        <Text style={styles.heading}>
+          Welcome to DormDeals
+        </Text>
         <Text style={styles.description}>
-          Welcome to my app! This is a description of what my app does and how it can help you. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Buy, Sell or donate your old hostel stuff with just a few clicks. It's that easy!
         </Text>
         <TouchableOpacity style={styles.button} onPress={this.handleGetStarted}>
           <Text style={styles.buttonText}>Get Started</Text>
@@ -34,10 +37,15 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 20,
   },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginTop: 110,
+  },
   description: {
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: 20,
+    marginTop: 90,
   },
   button: {
     backgroundColor: '#007AFF',
