@@ -10,10 +10,11 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="StarterScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="StarterScreen" >
         <Stack.Screen
           name="StarterScreen"
           component={StarterScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LoginScreen"
