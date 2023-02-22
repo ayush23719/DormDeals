@@ -21,6 +21,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.ayush23719.dormdeals",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
