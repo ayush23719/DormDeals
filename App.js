@@ -2,22 +2,22 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import StarterScreen from './screens/starterScreen';
-import loginScreen from './screens/loginScreen'
+import StarterScreen from './screens/StarterScreen';
+import LoginScreen from './screens/LoginScreen'
 
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="StarterScreen">
+      <Stack.Navigator initialRouteName="StarterScreen" screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="StarterScreen"
           component={StarterScreen}
         />
         <Stack.Screen
-          name="loginScreen"
-          component={loginScreen}
+          name="LoginScreen"
+          component={LoginScreen}
           options={{ title: 'Login' }}
         />
       </Stack.Navigator>

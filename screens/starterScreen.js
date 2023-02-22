@@ -8,14 +8,14 @@ export default function StarterScreen() {
 
     const navigation = useNavigation();
     const handleGetStarted = () => {
-        navigation.navigate('loginScreen');
+        navigation.navigate('LoginScreen');
     };
     const [fontsLoaded] = useFonts({
-        'Raleway-Bold': require('./assets/fonts/static/Raleway-Bold.ttf'),
-        'Raleway-Medium': require('./assets/fonts/static/Raleway-Medium.ttf'),
-        'Raleway': require('./assets/fonts/static/Raleway-Regular.ttf'),
-        'Kanit': require('./assets/fonts/Kanit-Regular.ttf'),
-        'NanumGothic': require('./assets/fonts/NanumGothic-Regular.ttf'),
+        'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
+        'Raleway-Medium': require('../assets/fonts/static/Raleway-Medium.ttf'),
+        'Raleway': require('../assets/fonts/static/Raleway-Regular.ttf'),
+        'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
+        'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
     });
     const onLayoutRootView = useCallback(async () => {
         if (fontsLoaded) {
@@ -50,8 +50,8 @@ export default function StarterScreen() {
             </TouchableOpacity>
         </View>
     );
-}
 
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
