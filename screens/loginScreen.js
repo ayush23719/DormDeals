@@ -30,7 +30,7 @@ const Login = ({ navigation }) => {
                     setEmail('');
                     setPassword('');
                     setIsLoading(false);
-                    navigation.navigate('Dashboard');
+                    navigation.navigate('DashboardScreen');
                 })
                 .catch((error) => setErrorMessage(error.message));
         }

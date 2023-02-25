@@ -17,7 +17,7 @@ const Dashboard = ({ navigation }) => {
     const signOut = () => {
         firebase.auth().signOut()
             .then(() => {
-                navigation.navigate('Login');
+                navigation.navigate('LoginScreen');
             })
             .catch(error => console.log(error.message));
     };

@@ -1,5 +1,6 @@
-// database/firebaseDb.js
-import * as firebase from "firebase/app";
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
 const firebaseConfig = {
     apiKey: "AIzaSyBB4K9qKnTcMmUxzDktkEDWXzMMSy0hdAk",
     authDomain: "dormdeals-4937a.firebaseapp.com",
@@ -11,3 +12,5 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 export default firebase;
+
+
