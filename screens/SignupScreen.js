@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import firebase from '../database/firebase';
+import { useFonts } from 'expo-font';
 const Signup = ({ navigation }) => {
+    const [fontsLoaded] = useFonts({
+        'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
+        'Raleway-Medium': require('../assets/fonts/static/Raleway-Medium.ttf'),
+        'Raleway': require('../assets/fonts/static/Raleway-Regular.ttf'),
+        'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
+        'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
+    });
 
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
@@ -52,6 +60,10 @@ const Signup = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Create An Account</Text>
+                <Text style={styles.headerDesc}>Create your account in less than a minute. Enter your Name, Email and Password.</Text>
+            </View>
             <TextInput
                 style={styles.inputStyle}
                 placeholder="Name"
@@ -72,11 +84,9 @@ const Signup = ({ navigation }) => {
                 maxLength={15}
                 secureTextEntry={true}
             />
-            <Button
-                color="#3740FE"
-                title="Signup"
-                onPress={() => registerUser()}
-            />
+            <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
+                <Text style={styles.buttonText}>Create An Account</Text>
+            </TouchableOpacity>
             <Text
                 style={styles.loginText}
                 onPress={() => navigation.navigate('LoginScreen')}>
@@ -95,18 +105,46 @@ const styles = StyleSheet.create({
         padding: 35,
         backgroundColor: '#fff'
     },
+    header: {
+        marginBottom: 300
+    },
+    headerText: {
+        fontFamily: 'Raleway-Bold',
+        fontSize: 35,
+        marginBottom: 10
+    },
+    headerDesc: {
+        fontFamily: 'Raleway',
+        fontSize: 16,
+        color: '#b3b2b1'
+    },
     inputStyle: {
+        height: 50,
         width: '100%',
         marginBottom: 15,
-        paddingBottom: 15,
+        paddingBottom: 10,
+        paddingLeft: 10,
         alignSelf: "center",
         borderColor: "#ccc",
-        borderBottomWidth: 1
+        borderWidth: 1,
+        fontFamily: 'Raleway',
+        fontSize: 18,
+        borderRadius: 10
+
     },
-    loginText: {
-        color: '#3740FE',
+    buttonText: {
+        fontFamily: 'Raleway',
+        color: '#fff',
         marginTop: 25,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 18,
+
+    },
+    button: {
+        backgroundColor: '#D4ED26',
+        height: 50,
+        borderRadius: 10,
+        paddingBottom: 10
     },
     preloader: {
         left: 0,
