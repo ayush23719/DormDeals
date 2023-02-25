@@ -64,34 +64,36 @@ const Signup = ({ navigation }) => {
                 <Text style={styles.headerText}>Create An Account</Text>
                 <Text style={styles.headerDesc}>Create your account in less than a minute. Enter your Name, Email and Password.</Text>
             </View>
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Name"
-                value={displayName}
-                onChangeText={(val) => updateInputVal(val, 'displayName')}
-            />
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Email"
-                value={email}
-                onChangeText={(val) => updateInputVal(val, 'email')}
-            />
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Password"
-                value={password}
-                onChangeText={(val) => updateInputVal(val, 'password')}
-                maxLength={15}
-                secureTextEntry={true}
-            />
-            <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
-                <Text style={styles.buttonText}>Create An Account</Text>
-            </TouchableOpacity>
-            <Text
-                style={styles.loginText}
-                onPress={() => navigation.navigate('LoginScreen')}>
-                Already Registered? Click here to login
-            </Text>
+            <View style={styles.formGroup}>
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Name"
+                    value={displayName}
+                    onChangeText={(val) => updateInputVal(val, 'displayName')}
+                />
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={(val) => updateInputVal(val, 'email')}
+                />
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={(val) => updateInputVal(val, 'password')}
+                    maxLength={15}
+                    secureTextEntry={true}
+                />
+                <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
+                    <Text style={styles.buttonText}>Create An Account</Text>
+                </TouchableOpacity>
+                <Text
+                    style={styles.loginText}
+                    onPress={() => navigation.navigate('LoginScreen')}>
+                    Already Registered? Click here to login
+                </Text>
+            </View>
         </View>
     );
 };
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: 35,
+        padding: 20,
         backgroundColor: '#fff'
     },
     header: {
@@ -118,17 +120,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#b3b2b1'
     },
+    formGroup: {
+        marginTop: -290
+    },
     inputStyle: {
         height: 50,
         width: '100%',
         marginBottom: 15,
-        paddingBottom: 10,
-        paddingLeft: 10,
+        paddingBottom: 8,
+        paddingLeft: 20,
         alignSelf: "center",
-        borderColor: "#ccc",
+        borderColor: "#c7c7c7",
         borderWidth: 1,
         fontFamily: 'Raleway',
-        fontSize: 18,
+        fontSize: 15,
         borderRadius: 10
 
     },
