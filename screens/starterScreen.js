@@ -8,7 +8,7 @@ export default function StarterScreen() {
 
     const navigation = useNavigation();
     const handleGetStarted = () => {
-        navigation.navigate('LoginScreen');
+        navigation.navigate('SignupScreen');
     };
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
