@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { firebaseConfig } from './firebaseConfig';
 import StarterScreen from './screens/StarterScreen';
 import LoginScreen from './screens/LoginScreen'
-import SignUpScreen from './screens/SignUpScreen'
+import SignupScreen from './screens/SignupScreen'
+import DashboardScreen from './screens/DashboardScreen'
 
 const Stack = createStackNavigator();
 
@@ -26,6 +26,11 @@ function App() {
           name="LoginScreen"
           component={LoginScreen}
           options={{ title: 'Login' }}
+        />
+        <Stack.Screen
+          name="DashboardScreen"
+          component={DashboardScreen}
+          options={{ title: 'Dashboard' }}
         />
 
       </Stack.Navigator>
