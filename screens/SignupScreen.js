@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 const Signup = ({ navigation }) => {
@@ -26,7 +26,29 @@ const Signup = ({ navigation }) => {
             setPassword(val);
         }
     };
-
+    const [displayNamePlaceholderPos] = useState(new Animated.Value(35));
+    const [emailPlaceholderPos] = useState(new Animated.Value(35));
+    const [passwordPlaceholderPos] = useState(new Animated.Value(35));
+    const [displayNamePlaceholderColor, setDisplayNamePlaceholderColor] = useState('#828282');
+    const [emailPlaceholderColor, setEmailPlaceholderColor] = useState('#828282');
+    const [passwordPlaceholderColor, setPasswordPlaceholderColor] = useState('#828282');
+    const [displayNamePlaceholderwidth, setDisplayNamePlaceholderwidth] = useState(45);
+    const [emailPlaceholderwidth, setEmailPlaceholderwidth] = useState(40);
+    const [passwordPlaceholderwidth, setPasswordPlaceholderwidth] = useState(65);
+    const [borderDisplayName, setBorderDisplayName] = useState('#c7c7c7');
+    const [borderEmail, setBorderEmail] = useState('#c7c7c7');
+    const [borderPassword, setBorderPassword] = useState('#c7c7c7');
+    useEffect(() => {
+        setDisplayNamePlaceholderColor(displayName === '' ? '#828282' : '#D4ED26');
+        setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+        setPasswordPlaceholderColor(password === '' ? '#828282' : '#D4ED26');
+        setDisplayNamePlaceholderwidth(displayName === '' ? 45 : 45);
+        setEmailPlaceholderwidth(email === '' ? 40 : 40);
+        setPasswordPlaceholderwidth(password === '' ? 70 : 70);
+        setBorderDisplayName(displayName === '' ? '#c7c7c7' : '#D4ED26');
+        setBorderEmail(email === '' ? '#c7c7c7' : '#D4ED26');
+        setBorderPassword(password === '' ? '#c7c7c7' : '#D4ED26');
+    }, [email, password]);
     const registerUser = () => {
         if (email === '' || password === '') {
             Alert.alert('Please enter all the details!');
@@ -59,32 +81,109 @@ const Signup = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Create An Account</Text>
                 <Text style={styles.headerDesc}>Create your account in less than a minute. Enter your name, email address and password.</Text>
             </View>
             <View style={styles.formGroup}>
+                <Animated.Text
+                    style={[styles.placeholder, { marginLeft: 20, top: displayNamePlaceholderPos, color: displayNamePlaceholderColor, width: displayNamePlaceholderwidth }]}
+                >
+                    Name
+                </Animated.Text>
                 <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Name"
+                    style={[styles.inputStyle, { borderColor: borderDisplayName }]}
                     value={displayName}
                     onChangeText={(val) => updateInputVal(val, 'displayName')}
+                    onFocus={() => {
+                        {
+                            Animated.timing(displayNamePlaceholderPos, {
+                                toValue: 10,
+                                duration: 200,
+                                useNativeDriver: false,
+                            }).start();
+                        }; setDisplayNamePlaceholderColor('#D4ED26'); setDisplayNamePlaceholderwidth(45);
+                        setBorderDisplayName('#D4ED26');
+                    }}
+                    onBlur={() => {
+                        {
+                            if (displayName.length === 0) {
+                                Animated.timing(displayNamePlaceholderPos, {
+                                    toValue: 35,
+                                    duration: 200,
+                                    useNativeDriver: false,
+                                }).start();
+                            }
+                        }; setDisplayNamePlaceholderColor(displayName === '' ? '#828282' : '#D4ED26');
+                        setBorderDisplayName(displayName === '' ? '#c7c7c7' : '#D4ED26')
+                    }}
                 />
+                <Animated.Text
+                    style={[styles.placeholder, { marginLeft: 20, top: emailPlaceholderPos, color: emailPlaceholderColor, width: emailPlaceholderwidth }]}
+                >
+                    Email
+                </Animated.Text>
                 <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Email"
+                    style={[styles.inputStyle, { borderColor: borderEmail }]}
                     value={email}
                     onChangeText={(val) => updateInputVal(val, 'email')}
+                    onFocus={() => {
+                        {
+                            Animated.timing(emailPlaceholderPos, {
+                                toValue: 10,
+                                duration: 200,
+                                useNativeDriver: false,
+                            }).start();
+                        }; setEmailPlaceholderColor('#D4ED26'); setEmailPlaceholderwidth(40);
+                        setBorderEmail('#D4ED26');
+                    }}
+                    onBlur={() => {
+                        {
+                            if (email.length === 0) {
+                                Animated.timing(emailPlaceholderPos, {
+                                    toValue: 35,
+                                    duration: 200,
+                                    useNativeDriver: false,
+                                }).start();
+                            }
+                        }; setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+                        setBorderEmail(email === '' ? '#c7c7c7' : '#D4ED26')
+                    }}
                 />
+                <Animated.Text
+                    style={[styles.placeholder, { marginLeft: 20, top: passwordPlaceholderPos, color: passwordPlaceholderColor, width: passwordPlaceholderwidth }]}
+                >
+                    Password
+                </Animated.Text>
                 <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Password"
+                    style={[styles.inputStyle, { borderColor: borderPassword }]}
                     value={password}
                     onChangeText={(val) => updateInputVal(val, 'password')}
                     maxLength={15}
                     secureTextEntry={true}
-                />
+                    onFocus={() => {
+                        {
+                            Animated.timing(passwordPlaceholderPos, {
+                                toValue: 10,
+                                duration: 200,
+                                useNativeDriver: false,
+                            }).start();
+                        }; setPasswordPlaceholderColor('#D4ED26'); setPasswordPlaceholderwidth(70);
+                        setBorderPassword('#D4ED26');
+                    }}
+                    onBlur={() => {
+                        {
+                            if (password.length === 0) {
+                                Animated.timing(passwordPlaceholderPos, {
+                                    toValue: 35,
+                                    duration: 200,
+                                    useNativeDriver: false,
+                                }).start();
+                            }
+                        }; setPasswordPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+                        setBorderPassword(password === '' ? '#c7c7c7' : '#D4ED26')
+                    }} />
                 <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
                     <Text style={styles.buttonText}>Create an Account</Text>
                 </TouchableOpacity>
@@ -93,7 +192,7 @@ const Signup = ({ navigation }) => {
                     Already have an account? <Text style={{ color: '#D4ED26' }} onPress={() => navigation.navigate('LoginScreen')}>Log In</Text>
                 </Text>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -119,13 +218,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#828282'
     },
+    placeholder: {
+        zIndex: 1,
+        backgroundColor: '#fff',
+        fontFamily: 'Raleway',
+        fontSize: 15,
+    },
+
     formGroup: {
         marginTop: 30
     },
     inputStyle: {
         height: 55,
         width: '100%',
-        marginBottom: 15,
+        marginBottom: 0,
         paddingBottom: 8,
         paddingLeft: 20,
         alignSelf: "center",
@@ -148,7 +254,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#D4ED26',
         height: 55,
         borderRadius: 15,
-        paddingBottom: 10
+        paddingBottom: 10,
+        marginTop: 30,
     },
     preloader: {
         left: 0,
