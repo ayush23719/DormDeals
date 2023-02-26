@@ -62,7 +62,7 @@ const Signup = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Create An Account</Text>
-                <Text style={styles.headerDesc}>Create your account in less than a minute. Enter your Name, Email and Password.</Text>
+                <Text style={styles.headerDesc}>Create your account in less than a minute. Enter your name, email address and password.</Text>
             </View>
             <View style={styles.formGroup}>
                 <TextInput
