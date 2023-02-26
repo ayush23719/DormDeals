@@ -86,12 +86,12 @@ const Signup = ({ navigation }) => {
                     secureTextEntry={true}
                 />
                 <TouchableOpacity style={styles.button} onPress={() => registerUser()}>
-                    <Text style={styles.buttonText}>Create An Account</Text>
+                    <Text style={styles.buttonText}>Create an Account</Text>
                 </TouchableOpacity>
                 <Text
                     style={styles.loginText}
                     onPress={() => navigation.navigate('LoginScreen')}>
-                    Already Registered? Click here to login
+                    Already have an account? <Text style={{ color: '#D4ED26' }}>Log In</Text>
                 </Text>
             </View>
         </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     header: {
-        marginBottom: 300
+        marginTop: -50,
     },
     headerText: {
         fontFamily: 'Raleway-Bold',
@@ -118,13 +118,13 @@ const styles = StyleSheet.create({
     headerDesc: {
         fontFamily: 'Raleway',
         fontSize: 16,
-        color: '#b3b2b1'
+        color: '#828282'
     },
     formGroup: {
-        marginTop: -290
+        marginTop: 30
     },
     inputStyle: {
-        height: 50,
+        height: 55,
         width: '100%',
         marginBottom: 15,
         paddingBottom: 8,
@@ -134,21 +134,21 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'Raleway',
         fontSize: 15,
-        borderRadius: 10
+        borderRadius: 15
 
     },
     buttonText: {
-        fontFamily: 'Raleway',
-        color: '#fff',
-        marginTop: 25,
+        fontFamily: 'Raleway-Bold',
+        color: '#000',
+        marginTop: 10,
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 20,
 
     },
     button: {
         backgroundColor: '#D4ED26',
-        height: 50,
-        borderRadius: 10,
+        height: 55,
+        borderRadius: 15,
         paddingBottom: 10
     },
     preloader: {
@@ -160,7 +160,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff'
-    }
+    },
+    loginText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#000',
+        marginTop: 440,
+        textAlign: 'center',
+        marginLeft: 60,
+        fontSize: 15,
+        position: 'absolute',
+    },
 });
 
 export default Signup;
