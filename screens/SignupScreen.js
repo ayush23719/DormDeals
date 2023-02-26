@@ -29,7 +29,7 @@ const Signup = ({ navigation }) => {
 
     const registerUser = () => {
         if (email === '' || password === '') {
-            Alert.alert('Enter details to signup!');
+            Alert.alert('Please enter all the details!');
         } else {
             setIsLoading(true);
             firebase

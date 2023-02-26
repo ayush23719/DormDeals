@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import firebase from '../database/firebase';
-
+import { useFonts } from 'expo-font';
 const Login = ({ navigation }) => {
+    const [fontsLoaded] = useFonts({
+        'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
+        'Raleway-Medium': require('../assets/fonts/static/Raleway-Medium.ttf'),
+        'Raleway': require('../assets/fonts/static/Raleway-Regular.ttf'),
+        'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
+        'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
+    });
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +25,7 @@ const Login = ({ navigation }) => {
 
     const userLogin = () => {
         if (email === '' || password === '') {
-            Alert.alert('Enter details to signin!');
+            Alert.alert('Please enter all the details!');
         } else {
             setIsLoading(true);
             firebase
@@ -46,24 +53,34 @@ const Login = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Email"
-                value={email}
-                onChangeText={(val) => updateInputVal(val, 'email')}
-            />
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Password"
-                value={password}
-                onChangeText={(val) => updateInputVal(val, 'password')}
-                maxLength={15}
-                secureTextEntry={true}
-            />
-            <Button color="#3740FE" title="Signin" onPress={userLogin} />
-            <Text style={styles.loginText} onPress={() => navigation.navigate('SignupScreen')}>
-                Don't have account? Click here to signup
-            </Text>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Welcome back,</Text>
+                <Text style={styles.headerDesc}>We're happy to see you again. Enter your email address and password.</Text>
+            </View>
+            <View style={styles.formGroup}>
+
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={(val) => updateInputVal(val, 'email')}
+                />
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={(val) => updateInputVal(val, 'password')}
+                    maxLength={15}
+                    secureTextEntry={true}
+                />
+                <TouchableOpacity style={styles.button} onPress={() => userLogin()}>
+                    <Text style={styles.buttonText}>Log In</Text>
+                </TouchableOpacity>
+                <Text
+                    style={styles.loginText}>
+                    Don't have an account? <Text style={{ color: '#D4ED26' }} onPress={() => navigation.navigate('LoginScreen')}>Sign Up</Text>
+                </Text>
+            </View>
         </View>
     );
 };
@@ -71,24 +88,55 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: 35,
-        backgroundColor: '#fff',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: 20,
+        backgroundColor: '#fff'
+    },
+    header: {
+        marginTop: -50,
+    },
+    headerText: {
+        fontFamily: 'Raleway-Bold',
+        fontSize: 35,
+        marginBottom: 10
+    },
+    headerDesc: {
+        fontFamily: 'Raleway',
+        fontSize: 16,
+        color: '#828282'
+    },
+    formGroup: {
+        marginTop: 30
     },
     inputStyle: {
+        height: 55,
         width: '100%',
         marginBottom: 15,
-        paddingBottom: 15,
-        alignSelf: 'center',
-        borderColor: '#ccc',
-        borderBottomWidth: 1,
+        paddingBottom: 8,
+        paddingLeft: 20,
+        alignSelf: "center",
+        borderColor: "#c7c7c7",
+        borderWidth: 1,
+        fontFamily: 'Raleway',
+        fontSize: 15,
+        borderRadius: 15
+
     },
-    loginText: {
-        color: '#3740FE',
-        marginTop: 25,
+    buttonText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#000',
+        marginTop: 10,
         textAlign: 'center',
+        fontSize: 20,
+
+    },
+    button: {
+        backgroundColor: '#D4ED26',
+        height: 55,
+        borderRadius: 15,
+        paddingBottom: 10
     },
     preloader: {
         left: 0,
@@ -98,7 +146,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
+    },
+    loginText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#000',
+        marginTop: 400,
+        textAlign: 'center',
+        marginLeft: 60,
+        fontSize: 15,
+        position: 'absolute',
     },
 });
 
