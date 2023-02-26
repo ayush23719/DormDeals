@@ -89,9 +89,8 @@ const Signup = ({ navigation }) => {
                     <Text style={styles.buttonText}>Create an Account</Text>
                 </TouchableOpacity>
                 <Text
-                    style={styles.loginText}
-                    onPress={() => navigation.navigate('LoginScreen')}>
-                    Already have an account? <Text style={{ color: '#D4ED26' }}>Log In</Text>
+                    style={styles.loginText}>
+                    Already have an account? <Text style={{ color: '#D4ED26' }} onPress={() => navigation.navigate('LoginScreen')}>Log In</Text>
                 </Text>
             </View>
         </View>
