@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 const Login = ({ navigation }) => {
@@ -22,7 +22,18 @@ const Login = ({ navigation }) => {
             setPassword(val);
         }
     };
-
+    const [emailPlaceholderPos] = useState(new Animated.Value(35));
+    const [passwordPlaceholderPos] = useState(new Animated.Value(35));
+    const [emailPlaceholderColor, setEmailPlaceholderColor] = useState('#828282');
+    const [passwordPlaceholderColor, setPasswordPlaceholderColor] = useState('#828282');
+    const [emailPlaceholderwidth, setEmailPlaceholderwidth] = useState(45);
+    const [passwordPlaceholderwidth, setPasswordPlaceholderwidth] = useState(65);
+    useEffect(() => {
+        setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+        setPasswordPlaceholderColor(password === '' ? '#828282' : '#D4ED26');
+        setEmailPlaceholderwidth(email === '' ? 45 : 45);
+        setPasswordPlaceholderwidth(password === '' ? 70 : 70);
+    }, [email, password]);
     const userLogin = () => {
         if (email === '' || password === '') {
             Alert.alert('Please enter all the details!');
@@ -61,21 +72,67 @@ const Login = ({ navigation }) => {
                 <Text style={styles.headerDesc}>We're happy to see you again. Enter your email address and password.</Text>
             </View>
             <View style={styles.formGroup}>
-
+                <Animated.Text
+                    style={[styles.placeholder, { marginLeft: 20, top: emailPlaceholderPos, color: emailPlaceholderColor, width: emailPlaceholderwidth }]}
+                >
+                    Email
+                </Animated.Text>
                 <TextInput
                     style={styles.inputStyle}
-                    placeholder="Email"
                     value={email}
                     onChangeText={(val) => updateInputVal(val, 'email')}
+                    onFocus={() => {
+                        {
+                            Animated.timing(emailPlaceholderPos, {
+                                toValue: 10,
+                                duration: 200,
+                                useNativeDriver: false,
+                            }).start();
+                        }; setEmailPlaceholderColor('#D4ED26'); setEmailPlaceholderwidth(45);
+                    }}
+                    onBlur={() => {
+                        {
+                            if (email.length === 0) {
+                                Animated.timing(emailPlaceholderPos, {
+                                    toValue: 35,
+                                    duration: 200,
+                                    useNativeDriver: false,
+                                }).start();
+                            }
+                        }; setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26')
+                    }}
                 />
+                <Animated.Text
+                    style={[styles.placeholder, { marginLeft: 20, top: passwordPlaceholderPos, color: passwordPlaceholderColor, width: passwordPlaceholderwidth }]}
+                >
+                    Password
+                </Animated.Text>
                 <TextInput
                     style={styles.inputStyle}
-                    placeholder="Password"
                     value={password}
                     onChangeText={(val) => updateInputVal(val, 'password')}
                     maxLength={15}
                     secureTextEntry={true}
-                />
+                    onFocus={() => {
+                        {
+                            Animated.timing(passwordPlaceholderPos, {
+                                toValue: 10,
+                                duration: 200,
+                                useNativeDriver: false,
+                            }).start();
+                        }; setPasswordPlaceholderColor('#D4ED26'); setPasswordPlaceholderwidth(70);
+                    }}
+                    onBlur={() => {
+                        {
+                            if (password.length === 0) {
+                                Animated.timing(passwordPlaceholderPos, {
+                                    toValue: 35,
+                                    duration: 200,
+                                    useNativeDriver: false,
+                                }).start();
+                            }
+                        }; setPasswordPlaceholderColor(email === '' ? '#828282' : '#D4ED26')
+                    }} />
                 <TouchableOpacity style={styles.button} onPress={() => userLogin()}>
                     <Text style={styles.buttonText}>Log In</Text>
                 </TouchableOpacity>
@@ -115,6 +172,14 @@ const styles = StyleSheet.create({
     },
     formGroup: {
         marginTop: 30
+    },
+    placeholder: {
+        zIndex: 1,
+        // height: 20,
+        // width: '25%',
+        backgroundColor: '#fff',
+        fontFamily: 'Raleway',
+        fontSize: 15,
     },
     inputStyle: {
         height: 55,
