@@ -26,13 +26,17 @@ const Login = ({ navigation }) => {
     const [passwordPlaceholderPos] = useState(new Animated.Value(35));
     const [emailPlaceholderColor, setEmailPlaceholderColor] = useState('#828282');
     const [passwordPlaceholderColor, setPasswordPlaceholderColor] = useState('#828282');
-    const [emailPlaceholderwidth, setEmailPlaceholderwidth] = useState(45);
+    const [emailPlaceholderwidth, setEmailPlaceholderwidth] = useState(40);
     const [passwordPlaceholderwidth, setPasswordPlaceholderwidth] = useState(65);
+    const [borderEmail, setBorderEmail] = useState('#c7c7c7');
+    const [borderPassword, setBorderPassword] = useState('#c7c7c7');
     useEffect(() => {
         setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
         setPasswordPlaceholderColor(password === '' ? '#828282' : '#D4ED26');
-        setEmailPlaceholderwidth(email === '' ? 45 : 45);
+        setEmailPlaceholderwidth(email === '' ? 40 : 40);
         setPasswordPlaceholderwidth(password === '' ? 70 : 70);
+        setBorderEmail(email === '' ? '#c7c7c7' : '#D4ED26');
+        setBorderPassword(password === '' ? '#c7c7c7' : '#D4ED26');
     }, [email, password]);
     const userLogin = () => {
         if (email === '' || password === '') {
@@ -78,7 +82,7 @@ const Login = ({ navigation }) => {
                     Email
                 </Animated.Text>
                 <TextInput
-                    style={styles.inputStyle}
+                    style={[styles.inputStyle, { borderColor: borderEmail }]}
                     value={email}
                     onChangeText={(val) => updateInputVal(val, 'email')}
                     onFocus={() => {
@@ -88,7 +92,8 @@ const Login = ({ navigation }) => {
                                 duration: 200,
                                 useNativeDriver: false,
                             }).start();
-                        }; setEmailPlaceholderColor('#D4ED26'); setEmailPlaceholderwidth(45);
+                        }; setEmailPlaceholderColor('#D4ED26'); setEmailPlaceholderwidth(40);
+                        setBorderEmail('#D4ED26');
                     }}
                     onBlur={() => {
                         {
@@ -99,7 +104,8 @@ const Login = ({ navigation }) => {
                                     useNativeDriver: false,
                                 }).start();
                             }
-                        }; setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26')
+                        }; setEmailPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+                        setBorderEmail(email === '' ? '#c7c7c7' : '#D4ED26')
                     }}
                 />
                 <Animated.Text
@@ -108,7 +114,7 @@ const Login = ({ navigation }) => {
                     Password
                 </Animated.Text>
                 <TextInput
-                    style={styles.inputStyle}
+                    style={[styles.inputStyle, { borderColor: borderPassword }]}
                     value={password}
                     onChangeText={(val) => updateInputVal(val, 'password')}
                     maxLength={15}
@@ -121,6 +127,7 @@ const Login = ({ navigation }) => {
                                 useNativeDriver: false,
                             }).start();
                         }; setPasswordPlaceholderColor('#D4ED26'); setPasswordPlaceholderwidth(70);
+                        setBorderPassword('#D4ED26');
                     }}
                     onBlur={() => {
                         {
@@ -131,7 +138,8 @@ const Login = ({ navigation }) => {
                                     useNativeDriver: false,
                                 }).start();
                             }
-                        }; setPasswordPlaceholderColor(email === '' ? '#828282' : '#D4ED26')
+                        }; setPasswordPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+                        setBorderPassword(password === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
                 <TouchableOpacity style={styles.button} onPress={() => userLogin()}>
                     <Text style={styles.buttonText}>Log In</Text>
@@ -171,12 +179,10 @@ const styles = StyleSheet.create({
         color: '#828282'
     },
     formGroup: {
-        marginTop: 30
+        marginTop: 30,
     },
     placeholder: {
         zIndex: 1,
-        // height: 20,
-        // width: '25%',
         backgroundColor: '#fff',
         fontFamily: 'Raleway',
         fontSize: 15,
@@ -184,8 +190,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         height: 55,
         width: '100%',
-        marginBottom: 15,
-        paddingBottom: 8,
+        marginBottom: 0,
         paddingLeft: 20,
         alignSelf: "center",
         borderColor: "#c7c7c7",
@@ -204,10 +209,10 @@ const styles = StyleSheet.create({
 
     },
     button: {
+        marginTop: 30,
         backgroundColor: '#D4ED26',
         height: 55,
         borderRadius: 15,
-        paddingBottom: 10
     },
     preloader: {
         left: 0,
