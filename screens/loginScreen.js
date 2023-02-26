@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 const Login = ({ navigation }) => {
@@ -70,7 +70,7 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Welcome back,</Text>
                 <Text style={styles.headerDesc}>We're happy to see you again. Enter your email address and password.</Text>
@@ -152,7 +152,7 @@ const Login = ({ navigation }) => {
             {errorMessage ? (
                 <Text style={styles.error}>{errorMessage}</Text>
             ) : null}
-        </View>
+        </ScrollView>
     );
 };
 
