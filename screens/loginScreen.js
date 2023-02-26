@@ -39,7 +39,10 @@ const Login = ({ navigation }) => {
                     setIsLoading(false);
                     navigation.navigate('DashboardScreen');
                 })
-                .catch((error) => setErrorMessage(error.message));
+                .catch((error) => {
+                    setIsLoading(false);
+                    setErrorMessage('Incorrect details! Please check the email address or password and try again.');
+                });
         }
     };
 
@@ -81,6 +84,9 @@ const Login = ({ navigation }) => {
                     Don't have an account? <Text style={{ color: '#D4ED26' }} onPress={() => navigation.navigate('SignupScreen')}>Sign Up</Text>
                 </Text>
             </View>
+            {errorMessage ? (
+                <Text style={styles.error}>{errorMessage}</Text>
+            ) : null}
         </View>
     );
 };
@@ -157,6 +163,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         position: 'absolute',
     },
+    error: {
+        fontFamily: 'Raleway',
+        color: 'red',
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 15,
+    }
 });
 
 export default Login;
