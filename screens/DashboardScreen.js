@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
 import firebase from '../database/firebase';
-
+import { useFonts } from 'expo-font';
 const Dashboard = ({ navigation }) => {
-    const [displayName, setDisplayName] = useState('');
+    const [fontsLoaded] = useFonts({
+        'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
+        'Raleway-Medium': require('../assets/fonts/static/Raleway-Medium.ttf'),
+        'Raleway': require('../assets/fonts/static/Raleway-Regular.ttf'),
+        'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
+        'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
+    });
+    const [firstName, setFirstName] = useState('');
     const [uid, setUid] = useState('');
 
     useEffect(() => {
-        const currentUser = firebase.auth().currentUser;
-        if (currentUser) {
-            setDisplayName(currentUser.displayName);
-            setUid(currentUser.uid);
-        }
+        const user = firebase.auth().currentUser;
+        const fullName = user.displayName;
+        const nameArray = fullName.split(" ");
+        const firstName = nameArray[0];
+        setFirstName(firstName);
     }, []);
 
     const signOut = () => {
@@ -23,14 +30,13 @@ const Dashboard = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.textStyle}>Hello, {displayName}</Text>
-            <Button
-                color="#3740FE"
-                title="Logout"
-                onPress={signOut}
-            />
-        </View>
+        <ScrollView contentContainerStyle={styles.container}>
+            <Text style={styles.greetings}>Hello, {firstName}</Text>
+            <Text style={styles.welcome}>Looking to Buy, Sell or Donate?</Text>
+            <TouchableOpacity style={styles.button} onPress={signOut}>
+                <Text style={styles.buttonText}>Log Out</Text>
+            </TouchableOpacity>
+        </ScrollView>
     );
 };
 
@@ -38,15 +44,36 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 35,
-        backgroundColor: '#fff'
+        justifyContent: 'space-between',
+        padding: 25,
+        flexDirection: 'column',
     },
-    textStyle: {
-        fontSize: 15,
-        marginBottom: 20
-    }
+    greetings: {
+        fontFamily: 'Raleway-Bold',
+        fontSize: 30,
+        marginTop: 50,
+        marginRight: 100,
+    },
+    welcome: {
+        fontFamily: 'Raleway-Bold',
+        fontSize: 20,
+        marginBottom: 420,
+        marginRight: 50,
+    },
+    buttonText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#000',
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 20,
+
+    },
+    button: {
+        marginTop: 100,
+        backgroundColor: '#D4ED26',
+        height: 55,
+        borderRadius: 15,
+    },
 });
 
 export default Dashboard;

@@ -30,7 +30,7 @@ function App() {
         <Stack.Screen
           name="DashboardScreen"
           component={DashboardScreen}
-          options={{ title: 'Dashboard' }}
+          options={{ headerShown: false }}
         />
 
       </Stack.Navigator>
