@@ -32,15 +32,20 @@ const Dashboard = ({ navigation }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.greetings}>Hello, {firstName}</Text>
-            <View style={styles.buttonContainer}>
+            <View style={styles.main}>
+                <Text style={styles.greetings}>Hello, {firstName}</Text>
                 <Text style={styles.welcome}>Looking to Buy, Sell or Donate?</Text>
-                <TouchableOpacity style={styles.buy}>
-                    <Text style={styles.buyText}>Buy Items</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.sell}>
-                    <Text style={styles.sellText}>Sell Items</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buy}>
+                        <Text style={styles.buyText}>Buy Items</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sell}>
+                        <Text style={styles.sellText}>Sell Items</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.donations}>
+                        <Text style={styles.donateText}>Donations</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
             <TouchableOpacity style={styles.logOut} onPress={signOut}>
                 <Text style={styles.logOutText}>Log Out</Text>
@@ -51,30 +56,36 @@ const Dashboard = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         display: "flex",
-        padding: 25,
+        paddingLeft: 25,
+        paddingTop: 55,
+        paddingRight: 25,
         flexDirection: 'column',
+
+    },
+    main: {
+        height: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     greetings: {
         fontFamily: 'Raleway-Bold',
         fontSize: 30,
-        marginTop: 50,
-        marginRight: 100,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        marginTop: 30,
-        justifyContent: 'space-between'
     },
     welcome: {
+        paddingTop: 30,
         fontFamily: 'Raleway-Medium',
         fontSize: 20,
-        marginRight: 50,
+    },
+    buttonContainer: {
+        flexWrap: 'wrap',
+        paddingTop: 40,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     buy: {
-        marginLeft: -360,
-        marginTop: 80,
         backgroundColor: '#000',
         height: 85,
         borderRadius: 15,
@@ -88,12 +99,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     sell: {
-        marginLeft: 20,
         backgroundColor: '#000',
         height: 85,
         borderRadius: 15,
         width: 150,
-        marginTop: 80,
     },
     sellText: {
         fontFamily: 'Raleway-Bold',
@@ -101,6 +110,27 @@ const styles = StyleSheet.create({
         marginTop: 25,
         textAlign: 'center',
         fontSize: 20,
+    },
+    donations: {
+        backgroundColor: '#000',
+        height: 85,
+        borderRadius: 20,
+        flexGrow: 4,
+        marginTop: 20,
+    },
+    donateText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#fff',
+        marginTop: 25,
+        textAlign: 'center',
+        fontSize: 25,
+    },
+    logOut: {
+        marginTop: 420,
+        width: "100%",
+        backgroundColor: '#D4ED26',
+        height: 55,
+        borderRadius: 15,
     },
     logOutText: {
         fontFamily: 'Raleway-Bold',
@@ -110,12 +140,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
 
     },
-    logOut: {
-        marginTop: 350,
-        backgroundColor: '#D4ED26',
-        height: 55,
-        borderRadius: 15,
-    },
+
 });
 
 export default Dashboard;
