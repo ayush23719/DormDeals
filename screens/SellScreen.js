@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated, Switch } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 const Sell = ({ navigation }) => {
@@ -59,7 +59,7 @@ const Sell = ({ navigation }) => {
             </View>
         );
     }
-
+    const [checked, setChecked] = useState(false);
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
@@ -165,6 +165,8 @@ const Sell = ({ navigation }) => {
                         }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
+
+
                 <TouchableOpacity style={styles.image}>
                     <Text style={styles.imageText}>Attach Image</Text>
                 </TouchableOpacity>
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     header: {
-        marginTop: 30,
+        marginTop: -30,
     },
     headerText: {
         fontFamily: 'Raleway-Bold',

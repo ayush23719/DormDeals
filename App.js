@@ -35,7 +35,7 @@ function App() {
         />
         <Stack.Screen name="SellScreen"
           component={SellScreen}
-          options={{ headerShown: false }} />
+          options={{ title: '' }} />
 
       </Stack.Navigator>
     </NavigationContainer>
