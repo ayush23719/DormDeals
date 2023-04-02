@@ -105,7 +105,7 @@ const Sell = ({ navigation }) => {
                     Description
                 </Animated.Text>
                 <TextInput
-                    style={[styles.inputStyle, { borderColor: borderDescription, height: 150, padding: 10 }]}
+                    style={[styles.inputStyle, { borderColor: borderDescription, height: 150, padding: 15, textAlignVertical: 'top' }]}
                     value={description}
                     onChangeText={(val) => updateInputVal(val, 'description')}
                     multiline={true}
@@ -165,6 +165,9 @@ const Sell = ({ navigation }) => {
                         }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
+                <TouchableOpacity style={styles.image}>
+                    <Text style={styles.imageText}>Attach Image</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
@@ -218,6 +221,22 @@ const styles = StyleSheet.create({
         borderRadius: 15
 
     },
+    image: {
+        marginTop: 30,
+        backgroundColor: '#000',
+        height: 55,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '50%',
+        alignSelf: 'center'
+    },
+    imageText: {
+        fontFamily: 'Raleway-Bold',
+        color: '#fff',
+        fontSize: 20,
+        marginTop: -10,
+    },
     buttonText: {
         fontFamily: 'Raleway-Bold',
         color: '#000',
@@ -227,7 +246,7 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        marginTop: 30,
+        marginTop: 100,
         backgroundColor: '#D4ED26',
         height: 55,
         borderRadius: 15,
