@@ -138,7 +138,7 @@ const Login = ({ navigation }) => {
                                     useNativeDriver: false,
                                 }).start();
                             }
-                        }; setPasswordPlaceholderColor(email === '' ? '#828282' : '#D4ED26');
+                        }; setPasswordPlaceholderColor(password === '' ? '#828282' : '#D4ED26');
                         setBorderPassword(password === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
                 <TouchableOpacity style={styles.button} onPress={() => userLogin()}>

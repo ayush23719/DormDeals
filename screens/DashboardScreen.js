@@ -39,7 +39,7 @@ const Dashboard = ({ navigation }) => {
                     <TouchableOpacity style={styles.buy}>
                         <Text style={styles.buyText}>Buy Items</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.sell}>
+                    <TouchableOpacity style={styles.sell} onPress={() => navigation.navigate('SellScreen')}>
                         <Text style={styles.sellText}>Sell Items</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.donations}>

@@ -5,6 +5,7 @@ import StarterScreen from './screens/StarterScreen';
 import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
 import DashboardScreen from './screens/DashboardScreen'
+import SellScreen from './screens/SellScreen'
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,9 @@ function App() {
           component={DashboardScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="SellScreen"
+          component={SellScreen}
+          options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>
