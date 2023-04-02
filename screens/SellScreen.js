@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated, Switch } from 'react-native';
 import firebase from '../database/firebase';
+// import { CheckBox } from '@rneui/themed';
 import { useFonts } from 'expo-font';
 const Sell = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
