@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated, Switch } from 'react-native';
 import firebase from '../database/firebase';
-// import { CheckBox } from '@rneui/themed';
+import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
 const Sell = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
@@ -166,11 +166,11 @@ const Sell = ({ navigation }) => {
                         }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
-
-
+                <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} />
                 <TouchableOpacity style={styles.image}>
                     <Text style={styles.imageText}>Attach Image</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        marginTop: 100,
+        marginTop: 80,
         backgroundColor: '#D4ED26',
         height: 55,
         borderRadius: 15,
@@ -264,6 +264,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff'
     },
+    checkbox: {
+        marginTop: 10,
+        marginLeft: 10,
+    },
+    label: {
+        fontFamily: 'Raleway',
+        fontSize: 15,
+        marginTop: 10,
+        marginLeft: 10
+    }
 });
 
 export default Sell;
