@@ -1,3 +1,4 @@
+keys.env
 node_modules/
 .expo/
 dist/
@@ -9,7 +10,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-keys.env
+
 # macOS
 .DS_Store
-keys.env
