@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated, Switch } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
 import firebase from '../database/firebase';
 import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
+import * as ImagePicker from 'expo-image-picker';
 const Sell = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
@@ -15,7 +16,7 @@ const Sell = ({ navigation }) => {
     const [description, setDescription] = useState('');
     const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
+    const [isDonated, setIsDonated] = useState(false);
     const updateInputVal = (val, prop) => {
         if (prop === 'title') {
             setTitle(val);
@@ -27,6 +28,51 @@ const Sell = ({ navigation }) => {
         }
 
     };
+    const sellItem = () => {
+        setIsLoading(true);
+        const userID = firebase.auth().currentUser.uid;
+        const itemsRef = firebase.firestore().collection('items');
+        const donatedItemsRef = firebase.firestore().collection('donatedItems');
+
+        const item = {
+            title: title,
+            description: description,
+            phone: phone,
+            isDonated: isDonated,
+            userID: userID,
+        };
+
+        if (isDonated) {
+            donatedItemsRef
+                .add(item)
+                .then(() => {
+                    console.log('Item added to donated items');
+                    setIsLoading(false);
+                    navigation.navigate('DashboardScreen');
+                    Alert.alert('Success', 'Item added to Donations');
+                })
+                .catch((error) => {
+                    console.error('Error adding item to donated items: ', error);
+                    setIsLoading(false);
+                    Alert.alert('Error', 'Could not add item. Please try again later.');
+                });
+        } else {
+            itemsRef
+                .add(item)
+                .then(() => {
+                    console.log('Item added to items');
+                    setIsLoading(false);
+                    navigation.navigate('DashboardScreen');
+                    Alert.alert('Success', 'Item added to Buy Items.');
+                })
+                .catch((error) => {
+                    console.error('Error adding item to items: ', error);
+                    setIsLoading(false);
+                    Alert.alert('Error', 'Could not add item. Please try again later.');
+                });
+        }
+    };
+
     const [titlePlaceholderPos] = useState(new Animated.Value(35));
     const [descriptionPlaceholderPos] = useState(new Animated.Value(35));
     const [phonePlaceholderPos] = useState(new Animated.Value(35));
@@ -60,7 +106,7 @@ const Sell = ({ navigation }) => {
             </View>
         );
     }
-    const [checked, setChecked] = useState(false);
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
@@ -166,12 +212,12 @@ const Sell = ({ navigation }) => {
                         }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
-                <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} />
+                <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} onChange={(isChecked) => setIsDonated(isChecked)} />
                 <TouchableOpacity style={styles.image}>
                     <Text style={styles.imageText}>Attach Image</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={sellItem}>
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
 
