@@ -17,6 +17,8 @@ const Sell = ({ navigation }) => {
     const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isDonated, setIsDonated] = useState(false);
+    const [image, setImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
     const updateInputVal = (val, prop) => {
         if (prop === 'title') {
             setTitle(val);
@@ -28,7 +30,51 @@ const Sell = ({ navigation }) => {
         }
 
     };
-    const sellItem = () => {
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.uri);
+        }
+    };
+
+    const uploadImage = async () => {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const ref = firebase.storage().ref().child('Pictures/Image1');
+        const snapshot = ref.put(blob);
+
+        snapshot.on(
+            firebase.storage.TaskEvent.STATE_CHANGED,
+            () => {
+                setUploading(true);
+            },
+            (error) => {
+                console.log(error);
+                setUploading(false);
+                blob.close();
+                return;
+            },
+            () => {
+                snapshot.snapshot.ref.getDownloadURL().then((url) => {
+                    console.log('Download URL:', url);
+                    setUploading(false);
+                    setImage(url);
+                    blob.close();
+                    return url;
+                });
+            }
+        );
+    };
+    const sellItem = (image) => {
         setIsLoading(true);
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
@@ -40,6 +86,7 @@ const Sell = ({ navigation }) => {
             phone: phone,
             isDonated: isDonated,
             userID: userID,
+            image: image,
         };
 
         if (isDonated) {
@@ -213,11 +260,11 @@ const Sell = ({ navigation }) => {
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
                 <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} onChange={(isChecked) => setIsDonated(isChecked)} />
-                <TouchableOpacity style={styles.image}>
+                <TouchableOpacity style={styles.image} onPress={pickImage}>
                     <Text style={styles.imageText}>Attach Image</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={sellItem}>
+                {image && <Image source={{ uri: image }} style={{ width: 170, height: 200 }} />}
+                <TouchableOpacity style={styles.button} onPress={() => { sellItem; uploadImage }}>
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
 
@@ -319,7 +366,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginTop: 10,
         marginLeft: 10
-    }
+    },
 });
 
 export default Sell;
