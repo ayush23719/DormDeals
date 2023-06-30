@@ -4,6 +4,8 @@ import firebase from '../database/firebase';
 import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'react-native';
+
 const Sell = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
@@ -280,7 +282,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         padding: 20,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        overflowY: 'auto'
     },
     header: {
         marginTop: -30,
