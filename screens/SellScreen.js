@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
-import firebase from '../database/firebase';
+import { StyleSheet, Text, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import * as firebase from '../database/firebase';
 import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
+import { Box, NativeBaseProvider, Center, Container, Flex, Spacer, Input } from 'native-base';
 
 const Sell = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
@@ -14,58 +15,59 @@ const Sell = ({ navigation }) => {
         'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
         'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
     });
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [phone, setPhone] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [isDonated, setIsDonated] = useState(false);
-    const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const updateInputVal = (val, prop) => {
-        if (prop === 'title') {
-            setTitle(val);
-        } else if (prop === 'phone') {
-            setPhone(val);
-        }
-        else {
-            setDescription(val);
-        }
+    // const [title, setTitle] = useState('');
+    // const [description, setDescription] = useState('');
+    // const [phone, setPhone] = useState('');
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [isDonated, setIsDonated] = useState(false);
+    // const [image, setImage] = useState(null);
+    // const [uploading, setUploading] = useState(false);
+    // const updateInputVal = (val, prop) => {
+    //     if (prop === 'title') {
+    //         setTitle(val);
+    //     } else if (prop === 'phone') {
+    //         setPhone(val);
+    //     }
+    //     else {
+    //         setDescription(val);
+    //     }
 
-    };
+    // };
 
-    const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+    // const pickImage = async () => {
+    //     // No permissions request is necessary for launching the image library
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //         allowsEditing: true,
+    //         aspect: [4, 3],
+    //         quality: 1,
+    //     });
 
-        console.log(result);
+    //     console.log(result);
 
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
-    };
+    //     if (!result.canceled) {
+    //         setImage(result.assets[0].uri);
+    //     }
+    // };
 
-    const uploadImage = async () => {
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-            xhr.onerror = function (e) {
-                reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", uri, true);
-            xhr.send(null);
-        });
-    };
-    const ref = firebase.storage().ref().child("images/" + image);
-    const snapshot = ref.put(blob);
-    const sellItem = (image) => {
+    // const uploadImage = async () => {
+    //     const blob = await new Promise((resolve, reject) => {
+    //         const xhr = new XMLHttpRequest();
+    //         xhr.onload = function () {
+    //             resolve(xhr.response);
+    //         };
+    //         xhr.onerror = function (e) {
+    //             reject(new TypeError("Network request failed"));
+    //         };
+    //         xhr.responseType = "blob";
+    //         xhr.open("GET", uri, true);
+    //         xhr.send(null);
+    //     });
+    // };
+    // const ref = firebase.storage().ref().child("images/" + image);
+    // const snapshot = ref.put(blob);
+    // snapshot.on(firebase.storage.TaskEvent.STATE_CHANGED)
+    const sellItem = () => {
         setIsLoading(true);
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
@@ -77,7 +79,6 @@ const Sell = ({ navigation }) => {
             phone: phone,
             isDonated: isDonated,
             userID: userID,
-            image: image,
         };
 
         if (isDonated) {
@@ -111,47 +112,55 @@ const Sell = ({ navigation }) => {
         }
     };
 
-    const [titlePlaceholderPos] = useState(new Animated.Value(35));
-    const [descriptionPlaceholderPos] = useState(new Animated.Value(35));
-    const [phonePlaceholderPos] = useState(new Animated.Value(35));
-    const [titlePlaceholderColor, setTitlePlaceholderColor] = useState('#828282');
-    const [descriptionPlaceholderColor, setDescriptionPlaceholderColor] = useState('#828282');
-    const [phonePlaceholderColor, setPhonePlaceholderColor] = useState('#828282');
-    const [titlePlaceholderwidth, setTitlePlaceholderwidth] = useState(37);
-    const [descriptionPlaceholderwidth, setDescriptionPlaceholderwidth] = useState(85);
-    const [phonePlaceholderwidth, setPhonePlaceholderwidth] = useState(50);
-    const [borderTitle, setBorderTitle] = useState('#c7c7c7');
-    const [borderDescription, setBorderDescription] = useState('#c7c7c7');
-    const [borderPhone, setBorderPhone] = useState('#c7c7c7');
+    // const [titlePlaceholderPos] = useState(new Animated.Value(35));
+    // const [descriptionPlaceholderPos] = useState(new Animated.Value(35));
+    // const [phonePlaceholderPos] = useState(new Animated.Value(35));
+    // const [titlePlaceholderColor, setTitlePlaceholderColor] = useState('#828282');
+    // const [descriptionPlaceholderColor, setDescriptionPlaceholderColor] = useState('#828282');
+    // const [phonePlaceholderColor, setPhonePlaceholderColor] = useState('#828282');
+    // const [titlePlaceholderwidth, setTitlePlaceholderwidth] = useState(37);
+    // const [descriptionPlaceholderwidth, setDescriptionPlaceholderwidth] = useState(85);
+    // const [phonePlaceholderwidth, setPhonePlaceholderwidth] = useState(50);
+    // const [borderTitle, setBorderTitle] = useState('#c7c7c7');
+    // const [borderDescription, setBorderDescription] = useState('#c7c7c7');
+    // const [borderPhone, setBorderPhone] = useState('#c7c7c7');
 
-    useEffect(() => {
-        setTitlePlaceholderColor(title === '' ? '#828282' : '#D4ED26');
-        setDescriptionPlaceholderColor(description === '' ? '#828282' : '#D4ED26');
-        setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
-        setTitlePlaceholderwidth(title === '' ? 37 : 37);
-        setDescriptionPlaceholderwidth(description === '' ? 85 : 85);
-        setPhonePlaceholderwidth(phone === '' ? 50 : 50);
-        setBorderTitle(title === '' ? '#c7c7c7' : '#D4ED26');
-        setBorderDescription(description === '' ? '#c7c7c7' : '#D4ED26');
-        setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26');
-    }, [title, description, phone]);
+    // useEffect(() => {
+    //     setTitlePlaceholderColor(title === '' ? '#828282' : '#D4ED26');
+    //     setDescriptionPlaceholderColor(description === '' ? '#828282' : '#D4ED26');
+    //     setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
+    //     setTitlePlaceholderwidth(title === '' ? 37 : 37);
+    //     setDescriptionPlaceholderwidth(description === '' ? 85 : 85);
+    //     setPhonePlaceholderwidth(phone === '' ? 50 : 50);
+    //     setBorderTitle(title === '' ? '#c7c7c7' : '#D4ED26');
+    //     setBorderDescription(description === '' ? '#c7c7c7' : '#D4ED26');
+    //     setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26');
+    // }, [title, description, phone]);
 
 
-    if (isLoading) {
-        return (
-            <View style={styles.preloader}>
-                <ActivityIndicator size="large" color="#9E9E9E" />
-            </View>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //         <View style={styles.preloader}>
+    //             <ActivityIndicator size="large" color="#9E9E9E" />
+    //         </View>
+    //     );
+    // }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Sell Your Item</Text>
-                <Text style={styles.headerDesc}>List your item to sell in just a few steps. Enter the following details.</Text>
-            </View>
-            <View style={styles.formGroup}>
+        <NativeBaseProvider>
+            <Center>
+                <Container flex="1">
+                    <Flex direction="column" mt="70" alignItems="center" justifyContent="center">
+                        <View style={styles.header}>
+                            <Text style={styles.headerText}>Sell Your Item</Text>
+                            <Text style={styles.headerDesc}>List your item to sell in just a few steps. Enter the following details.</Text>
+                        </View>
+                    </Flex>
+                    <Flex direction="column" alignItems="center" justifyContent="center">
+                        <Input size="md" mt="170" placeholder="md Input" />
+                    </Flex>
+
+                    {/* <View style={styles.formGroup}>
                 <TouchableOpacity style={styles.image} onPress={pickImage}>
                     <Text style={styles.imageText}>Attach Image</Text>
                 </TouchableOpacity>
@@ -260,9 +269,11 @@ const Sell = ({ navigation }) => {
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
 
-            </View>
+            </View> */}
 
-        </ScrollView>
+                </Container >
+            </Center>
+        </NativeBaseProvider>
     );
 };
 
