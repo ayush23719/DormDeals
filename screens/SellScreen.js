@@ -34,8 +34,9 @@ const Sell = ({ navigation }) => {
     };
 
     const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
@@ -44,38 +45,26 @@ const Sell = ({ navigation }) => {
         console.log(result);
 
         if (!result.canceled) {
-            setImage(result.uri);
+            setImage(result.assets[0].uri);
         }
     };
 
     const uploadImage = async () => {
-        const response = await fetch(image);
-        const blob = await response.blob();
-        const ref = firebase.storage().ref().child('Pictures/Image1');
-        const snapshot = ref.put(blob);
-
-        snapshot.on(
-            firebase.storage.TaskEvent.STATE_CHANGED,
-            () => {
-                setUploading(true);
-            },
-            (error) => {
-                console.log(error);
-                setUploading(false);
-                blob.close();
-                return;
-            },
-            () => {
-                snapshot.snapshot.ref.getDownloadURL().then((url) => {
-                    console.log('Download URL:', url);
-                    setUploading(false);
-                    setImage(url);
-                    blob.close();
-                    return url;
-                });
-            }
-        );
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
     };
+    const ref = firebase.storage().ref().child("images/" + image);
+    const snapshot = ref.put(blob);
     const sellItem = (image) => {
         setIsLoading(true);
         const userID = firebase.auth().currentUser.uid;
@@ -163,6 +152,10 @@ const Sell = ({ navigation }) => {
                 <Text style={styles.headerDesc}>List your item to sell in just a few steps. Enter the following details.</Text>
             </View>
             <View style={styles.formGroup}>
+                <TouchableOpacity style={styles.image} onPress={pickImage}>
+                    <Text style={styles.imageText}>Attach Image</Text>
+                </TouchableOpacity>
+                {image && <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />}
                 <Animated.Text
                     style={[styles.placeholder, { marginLeft: 20, top: titlePlaceholderPos, color: titlePlaceholderColor, width: titlePlaceholderwidth }]}
                 >
@@ -262,10 +255,7 @@ const Sell = ({ navigation }) => {
                         setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
                     }} />
                 <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} onChange={(isChecked) => setIsDonated(isChecked)} />
-                <TouchableOpacity style={styles.image} onPress={pickImage}>
-                    <Text style={styles.imageText}>Attach Image</Text>
-                </TouchableOpacity>
-                {image && <Image source={{ uri: image }} style={{ width: 170, height: 200 }} />}
+
                 <TouchableOpacity style={styles.button} onPress={() => { sellItem; uploadImage }}>
                     <Text style={styles.buttonText}>Post Item</Text>
                 </TouchableOpacity>
