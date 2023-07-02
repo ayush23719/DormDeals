@@ -34,11 +34,7 @@ const Sell = ({ navigation }) => {
         },
 
     });
-    const styles = StyleSheet.create({
-        button: {
-            fontSize: 18,
-        },
-    });
+
 
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
@@ -79,7 +75,21 @@ const Sell = ({ navigation }) => {
         }
     };
 
-    const sellItem = () => {
+    const [imageURL, setImageURL] = useState(null);
+
+    const uploadImage = async (uri) => {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        const filename = Date.now().toString();
+
+        const storageRef = firebase.storage().ref().child(`images/${filename}`);
+        await storageRef.put(blob);
+
+        const url = await storageRef.getDownloadURL();
+        setImageURL(url);
+    };
+
+    const sellItem = async () => {
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
         const donatedItemsRef = firebase.firestore().collection('donatedItems');
@@ -91,6 +101,16 @@ const Sell = ({ navigation }) => {
             isDonated: isDonated,
             userID: userID,
         };
+        if (image) {
+            try {
+                await uploadImage(image);
+                item.imageURL = imageURL;
+            } catch (error) {
+                console.error('Error uploading image: ', error);
+                Alert.alert('Error', 'Could not upload image. Please try again later.');
+                return;
+            }
+        }
 
         if (isDonated) {
             donatedItemsRef
