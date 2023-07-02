@@ -1,13 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
 import * as firebase from '../database/firebase';
-import { Checkbox } from 'galio-framework';
+// import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
-import * as ImagePicker from 'expo-image-picker';
-import { Image } from 'react-native';
-import { Box, NativeBaseProvider, Center, Container, Flex, Spacer, Input } from 'native-base';
-
+// import * as ImagePicker from 'expo-image-picker';
+// import { Image } from 'react-native';
+import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex } from 'native-base';
 const Sell = ({ navigation }) => {
+    const theme = extendTheme({
+        fonts: {
+            heading: 'Raleway',
+            body: 'Raleway',
+            mono: 'Raleway',
+        },
+        components: {
+            Button: {
+                baseStyle: {
+                    _pressed: {
+                        bg: 'black',
+                    },
+                },
+                variants: {
+                    solidBlack: {
+                        bg: 'black',
+                    },
+                },
+                defaultProps: {
+                    variant: 'solidBlack',
+                },
+            },
+        },
+
+    });
+    const styles = StyleSheet.create({
+        button: {
+            fontSize: 18,
+        },
+    });
+
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/static/Raleway-Bold.ttf'),
         'Raleway-Medium': require('../assets/fonts/static/Raleway-Medium.ttf'),
@@ -15,24 +45,24 @@ const Sell = ({ navigation }) => {
         'Kanit': require('../assets/fonts/Kanit-Regular.ttf'),
         'NanumGothic': require('../assets/fonts/NanumGothic-Regular.ttf'),
     });
-    // const [title, setTitle] = useState('');
-    // const [description, setDescription] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [isDonated, setIsDonated] = useState(false);
-    // const [image, setImage] = useState(null);
-    // const [uploading, setUploading] = useState(false);
-    // const updateInputVal = (val, prop) => {
-    //     if (prop === 'title') {
-    //         setTitle(val);
-    //     } else if (prop === 'phone') {
-    //         setPhone(val);
-    //     }
-    //     else {
-    //         setDescription(val);
-    //     }
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [phone, setPhone] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDonated, setIsDonated] = useState(false);
+    const [image, setImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const updateInputVal = (val, prop) => {
+        if (prop === 'title') {
+            setTitle(val);
+        } else if (prop === 'phone') {
+            setPhone(val);
+        }
+        else {
+            setDescription(val);
+        }
 
-    // };
+    };
 
     // const pickImage = async () => {
     //     // No permissions request is necessary for launching the image library
@@ -147,229 +177,248 @@ const Sell = ({ navigation }) => {
     // }
 
     return (
-        <NativeBaseProvider>
-            <Center>
-                <Container flex="1">
-                    <Flex direction="column" mt="70" alignItems="center" justifyContent="center">
-                        <View style={styles.header}>
-                            <Text style={styles.headerText}>Sell Your Item</Text>
-                            <Text style={styles.headerDesc}>List your item to sell in just a few steps. Enter the following details.</Text>
+        <NativeBaseProvider theme={theme}>
+            <Box flex={1} p={4} justifyContent="center" alignItems="center">
+                <View style={{ flex: 1, width: '100%', paddingTop: 20, paddingBottom: 20 }}>
+                    <Heading mb={4} fontSize="4xl">Sell Your Item</Heading>
+                    <Text fontSize="lg" mb={4}>List your item to sell in just a few steps. Just enter the following details!</Text>
+                    <Box mb={2}>
+                        <Input placeholder="Full Name" fontSize="md" />
+                    </Box>
+                    <Box mb={2}>
+                        <Input placeholder="Description" multiline minHeight={120} textAlignVertical="top" fontSize="md" />
+                    </Box>
+                    <Box mb={2}>
+                        <Input placeholder="Phone Number" fontSize="md" />
+                    </Box>
+
+                    <Flex direction="row" alignItems="center" justifyContent="space-between" mb={4}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Checkbox value="donate" colorScheme="primary" accessibilityLabel="Donated Items" size="md" />
+                            <Text ml={2} fontSize="md">Donated Items</Text>
                         </View>
+                        <Link _text={{ fontSize: "md" }}>Attach Image</Link>
                     </Flex>
-                    <Flex direction="column" alignItems="center" justifyContent="center">
-                        <Input size="md" mt="170" placeholder="md Input" />
-                    </Flex>
-
-                    {/* <View style={styles.formGroup}>
-                <TouchableOpacity style={styles.image} onPress={pickImage}>
-                    <Text style={styles.imageText}>Attach Image</Text>
-                </TouchableOpacity>
-                {image && <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />}
-                <Animated.Text
-                    style={[styles.placeholder, { marginLeft: 20, top: titlePlaceholderPos, color: titlePlaceholderColor, width: titlePlaceholderwidth }]}
-                >
-                    Title
-                </Animated.Text>
-                <TextInput
-                    style={[styles.inputStyle, { borderColor: borderTitle }]}
-                    value={title}
-                    onChangeText={(val) => updateInputVal(val, 'title')}
-                    onFocus={() => {
-                        {
-                            Animated.timing(titlePlaceholderPos, {
-                                toValue: 10,
-                                duration: 200,
-                                useNativeDriver: false,
-                            }).start();
-                        }; setTitlePlaceholderColor('#D4ED26'); setTitlePlaceholderwidth(37);
-                        setBorderTitle('#D4ED26');
-                    }}
-                    onBlur={() => {
-                        {
-                            if (title.length === 0) {
-                                Animated.timing(titlePlaceholderPos, {
-                                    toValue: 35,
-                                    duration: 200,
-                                    useNativeDriver: false,
-                                }).start();
-                            }
-                        }; setTitlePlaceholderColor(title === '' ? '#828282' : '#D4ED26');
-                        setBorderTitle(title === '' ? '#c7c7c7' : '#D4ED26')
-                    }}
-                />
-                <Animated.Text
-                    style={[styles.placeholder, { marginLeft: 20, top: descriptionPlaceholderPos, color: descriptionPlaceholderColor, width: descriptionPlaceholderwidth }]}
-                >
-                    Description
-                </Animated.Text>
-                <TextInput
-                    style={[styles.inputStyle, { borderColor: borderDescription, height: 150, padding: 15, textAlignVertical: 'top' }]}
-                    value={description}
-                    onChangeText={(val) => updateInputVal(val, 'description')}
-                    multiline={true}
-                    numberOfLines={8}
-                    onFocus={() => {
-                        {
-                            Animated.timing(descriptionPlaceholderPos, {
-                                toValue: 10,
-                                duration: 200,
-                                useNativeDriver: false,
-                            }).start();
-                        }; setDescriptionPlaceholderColor('#D4ED26'); setDescriptionPlaceholderwidth(85);
-                        setBorderDescription('#D4ED26');
-                    }}
-                    onBlur={() => {
-                        {
-                            if (description.length === 0) {
-                                Animated.timing(descriptionPlaceholderPos, {
-                                    toValue: 35,
-                                    duration: 200,
-                                    useNativeDriver: false,
-                                }).start();
-                            }
-                        }; setDescriptionPlaceholderColor(description === '' ? '#828282' : '#D4ED26');
-                        setBorderDescription(description === '' ? '#c7c7c7' : '#D4ED26')
-                    }} />
-                <Animated.Text
-                    style={[styles.placeholder, { marginLeft: 20, top: phonePlaceholderPos, color: phonePlaceholderColor, width: phonePlaceholderwidth }]}
-                >
-                    Phone
-                </Animated.Text>
-                <TextInput
-                    style={[styles.inputStyle, { borderColor: borderPhone }]}
-                    value={phone}
-                    onChangeText={(val) => updateInputVal(val, 'phone')}
-
-
-                    onFocus={() => {
-                        {
-                            Animated.timing(phonePlaceholderPos, {
-                                toValue: 10,
-                                duration: 200,
-                                useNativeDriver: false,
-                            }).start();
-                        }; setPhonePlaceholderColor('#D4ED26'); setPhonePlaceholderwidth(50);
-                        setBorderPhone('#D4ED26');
-                    }}
-                    onBlur={() => {
-                        {
-                            if (description.length === 0) {
-                                Animated.timing(phonePlaceholderPos, {
-                                    toValue: 35,
-                                    duration: 200,
-                                    useNativeDriver: false,
-                                }).start();
-                            }
-                        }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
-                        setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
-                    }} />
-                <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} onChange={(isChecked) => setIsDonated(isChecked)} />
-
-                <TouchableOpacity style={styles.button} onPress={() => { sellItem; uploadImage }}>
-                    <Text style={styles.buttonText}>Post Item</Text>
-                </TouchableOpacity>
-
-            </View> */}
-
-                </Container >
-            </Center>
+                    <Button size="lg" mb={4}>
+                        <Text style={{ fontSize: 18, color: 'white' }}>Post Item</Text>
+                    </Button>
+                </View>
+            </Box>
         </NativeBaseProvider>
+
+        //         {/* <View style={styles.formGroup}>
+        //     <TouchableOpacity style={styles.image} onPress={pickImage}>
+        //         <Text style={styles.imageText}>Attach Image</Text>
+        //     </TouchableOpacity>
+        //     {image && <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />}
+        //     <Animated.Text
+        //         style={[styles.placeholder, { marginLeft: 20, top: titlePlaceholderPos, color: titlePlaceholderColor, width: titlePlaceholderwidth }]}
+        //     >
+        //         Title
+        //     </Animated.Text>
+        //     <TextInput
+        //         style={[styles.inputStyle, { borderColor: borderTitle }]}
+        //         value={title}
+        //         onChangeText={(val) => updateInputVal(val, 'title')}
+        //         onFocus={() => {
+        //             {
+        //                 Animated.timing(titlePlaceholderPos, {
+        //                     toValue: 10,
+        //                     duration: 200,
+        //                     useNativeDriver: false,
+        //                 }).start();
+        //             }; setTitlePlaceholderColor('#D4ED26'); setTitlePlaceholderwidth(37);
+        //             setBorderTitle('#D4ED26');
+        //         }}
+        //         onBlur={() => {
+        //             {
+        //                 if (title.length === 0) {
+        //                     Animated.timing(titlePlaceholderPos, {
+        //                         toValue: 35,
+        //                         duration: 200,
+        //                         useNativeDriver: false,
+        //                     }).start();
+        //                 }
+        //             }; setTitlePlaceholderColor(title === '' ? '#828282' : '#D4ED26');
+        //             setBorderTitle(title === '' ? '#c7c7c7' : '#D4ED26')
+        //         }}
+        //     />
+        //     <Animated.Text
+        //         style={[styles.placeholder, { marginLeft: 20, top: descriptionPlaceholderPos, color: descriptionPlaceholderColor, width: descriptionPlaceholderwidth }]}
+        //     >
+        //         Description
+        //     </Animated.Text>
+        //     <TextInput
+        //         style={[styles.inputStyle, { borderColor: borderDescription, height: 150, padding: 15, textAlignVertical: 'top' }]}
+        //         value={description}
+        //         onChangeText={(val) => updateInputVal(val, 'description')}
+        //         multiline={true}
+        //         numberOfLines={8}
+        //         onFocus={() => {
+        //             {
+        //                 Animated.timing(descriptionPlaceholderPos, {
+        //                     toValue: 10,
+        //                     duration: 200,
+        //                     useNativeDriver: false,
+        //                 }).start();
+        //             }; setDescriptionPlaceholderColor('#D4ED26'); setDescriptionPlaceholderwidth(85);
+        //             setBorderDescription('#D4ED26');
+        //         }}
+        //         onBlur={() => {
+        //             {
+        //                 if (description.length === 0) {
+        //                     Animated.timing(descriptionPlaceholderPos, {
+        //                         toValue: 35,
+        //                         duration: 200,
+        //                         useNativeDriver: false,
+        //                     }).start();
+        //                 }
+        //             }; setDescriptionPlaceholderColor(description === '' ? '#828282' : '#D4ED26');
+        //             setBorderDescription(description === '' ? '#c7c7c7' : '#D4ED26')
+        //         }} />
+        //     <Animated.Text
+        //         style={[styles.placeholder, { marginLeft: 20, top: phonePlaceholderPos, color: phonePlaceholderColor, width: phonePlaceholderwidth }]}
+        //     >
+        //         Phone
+        //     </Animated.Text>
+        //     <TextInput
+        //         style={[styles.inputStyle, { borderColor: borderPhone }]}
+        //         value={phone}
+        //         onChangeText={(val) => updateInputVal(val, 'phone')}
+
+
+        //         onFocus={() => {
+        //             {
+        //                 Animated.timing(phonePlaceholderPos, {
+        //                     toValue: 10,
+        //                     duration: 200,
+        //                     useNativeDriver: false,
+        //                 }).start();
+        //             }; setPhonePlaceholderColor('#D4ED26'); setPhonePlaceholderwidth(50);
+        //             setBorderPhone('#D4ED26');
+        //         }}
+        //         onBlur={() => {
+        //             {
+        //                 if (description.length === 0) {
+        //                     Animated.timing(phonePlaceholderPos, {
+        //                         toValue: 35,
+        //                         duration: 200,
+        //                         useNativeDriver: false,
+        //                     }).start();
+        //                 }
+        //             }; setPhonePlaceholderColor(phone === '' ? '#828282' : '#D4ED26');
+        //             setBorderPhone(phone === '' ? '#c7c7c7' : '#D4ED26')
+        //         }} />
+        //     <Checkbox color="success" label="Donate This Item" checkboxStyle={styles.checkbox} labelStyle={styles.label} onChange={(isChecked) => setIsDonated(isChecked)} />
+
+        //     <TouchableOpacity style={styles.button} onPress={() => { sellItem; uploadImage }}>
+        //         <Text style={styles.buttonText}>Post Item</Text>
+        //     </TouchableOpacity>
+
+        // </View> */}
+
+
     );
 };
 
 const styles = StyleSheet.create({
+    // container: {
+    //     flex: 1,
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     padding: 20,
+    //     backgroundColor: '#fff',
+    //     overflowY: 'auto'
+    // },
+    // header: {
+    //     marginTop: -30,
+    // },
+    // headerText: {
+    //     fontFamily: 'Raleway-Bold',
+    //     fontSize: 35,
+    //     marginBottom: 10
+    // },
+    // headerDesc: {
+    //     fontFamily: 'Raleway',
+    //     fontSize: 16,
+    //     color: '#828282'
+    // },
+    // formGroup: {
+    //     marginTop: 30,
+    // },
+    // placeholder: {
+    //     zIndex: 1,
+    //     backgroundColor: '#fff',
+    //     fontFamily: 'Raleway',
+    //     fontSize: 15,
+    // },
+    // inputStyle: {
+    //     height: 55,
+    //     width: '100%',
+    //     marginBottom: 0,
+    //     paddingLeft: 20,
+    //     alignSelf: "center",
+    //     borderColor: "#c7c7c7",
+    //     borderWidth: 1,
+    //     fontFamily: 'Raleway',
+    //     fontSize: 15,
+    //     borderRadius: 15
+
+    // },
+    // image: {
+    //     marginTop: 30,
+    //     backgroundColor: '#000',
+    //     height: 55,
+    //     borderRadius: 15,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     width: '50%',
+    //     alignSelf: 'center'
+    // },
+    // imageText: {
+    //     fontFamily: 'Raleway-Bold',
+    //     color: '#fff',
+    //     fontSize: 20,
+    //     marginTop: -10,
+    // },
+    // buttonText: {
+    //     fontFamily: 'Raleway-Bold',
+    //     color: '#000',
+    //     marginTop: 10,
+    //     textAlign: 'center',
+    //     fontSize: 20,
+
+    // },
+    // button: {
+    //     marginTop: 60,
+    //     backgroundColor: '#D4ED26',
+    //     height: 55,
+    //     borderRadius: 15,
+    // },
+    // preloader: {
+    //     left: 0,
+    //     right: 0,
+    //     top: 0,
+    //     bottom: 0,
+    //     position: 'absolute',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: '#fff'
+    // },
+    // checkbox: {
+    //     marginTop: 10,
+    //     marginLeft: 10,
+    // },
+    // label: {
+    //     fontFamily: 'Raleway',
+    //     fontSize: 15,
+    //     marginTop: 10,
+    //     marginLeft: 10
+    // },
     container: {
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        padding: 20,
-        backgroundColor: '#fff',
-        overflowY: 'auto'
-    },
-    header: {
-        marginTop: -30,
-    },
-    headerText: {
-        fontFamily: 'Raleway-Bold',
-        fontSize: 35,
-        marginBottom: 10
-    },
-    headerDesc: {
-        fontFamily: 'Raleway',
-        fontSize: 16,
-        color: '#828282'
-    },
-    formGroup: {
-        marginTop: 30,
-    },
-    placeholder: {
-        zIndex: 1,
-        backgroundColor: '#fff',
-        fontFamily: 'Raleway',
-        fontSize: 15,
-    },
-    inputStyle: {
-        height: 55,
-        width: '100%',
-        marginBottom: 0,
-        paddingLeft: 20,
-        alignSelf: "center",
-        borderColor: "#c7c7c7",
-        borderWidth: 1,
-        fontFamily: 'Raleway',
-        fontSize: 15,
-        borderRadius: 15
-
-    },
-    image: {
-        marginTop: 30,
-        backgroundColor: '#000',
-        height: 55,
-        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        width: '50%',
-        alignSelf: 'center'
-    },
-    imageText: {
-        fontFamily: 'Raleway-Bold',
-        color: '#fff',
-        fontSize: 20,
-        marginTop: -10,
-    },
-    buttonText: {
-        fontFamily: 'Raleway-Bold',
-        color: '#000',
-        marginTop: 10,
-        textAlign: 'center',
-        fontSize: 20,
-
-    },
-    button: {
-        marginTop: 60,
-        backgroundColor: '#D4ED26',
-        height: 55,
-        borderRadius: 15,
-    },
-    preloader: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        position: 'absolute',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff'
-    },
-    checkbox: {
-        marginTop: 10,
-        marginLeft: 10,
-    },
-    label: {
-        fontFamily: 'Raleway',
-        fontSize: 15,
-        marginTop: 10,
-        marginLeft: 10
     },
 });
 
