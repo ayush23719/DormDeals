@@ -79,15 +79,21 @@ const Sell = ({ navigation }) => {
     const [imageURL, setImageURL] = useState(null);
 
     const uploadImage = async (uri) => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        const filename = Date.now().toString();
+        try {
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const filename = Date.now().toString();
 
-        const storageRef = firebase.storage().ref().child(`images/${filename}`);
-        await storageRef.put(blob);
+            const storageRef = firebase.storage().ref().child(`images/${filename}`);
+            await storageRef.put(blob);
 
-        const url = await storageRef.getDownloadURL();
-        setImageURL(url);
+            const url = await storageRef.getDownloadURL();
+            setImageURL(url); // Update the imageURL state
+            return url; // Return the URL from the function
+        } catch (error) {
+            console.error('Error uploading image: ', error);
+            throw error; // Rethrow the error to handle it in the calling function
+        }
     };
 
     const sellItem = async () => {
@@ -102,55 +108,85 @@ const Sell = ({ navigation }) => {
             phone: phone,
             isDonated: isDonated,
             userID: userID,
-            imageURL: null,
         };
+
         if (image) {
             try {
-                await uploadImage(image);
-                item.imageURL = imageURL;
+                const uploadedImageUrl = await uploadImage(image);
+                item.imageURL = uploadedImageUrl;
+
+                if (isDonated) {
+                    donatedItemsRef
+                        .add(item)
+                        .then(() => {
+                            console.log('Item added to donated items');
+                            navigation.navigate('DashboardScreen');
+                            Alert.alert('Success', 'Item added to donations!');
+                        })
+                        .catch((error) => {
+                            console.error('Error adding item to donated items: ', error);
+                            Alert.alert('Error', 'Could not add item. Please try again later.');
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                        });
+                } else {
+                    itemsRef
+                        .add(item)
+                        .then(() => {
+                            console.log('Item added to items');
+                            navigation.navigate('DashboardScreen');
+                            Alert.alert('Success', 'Your item was successfully posted!');
+                        })
+                        .catch((error) => {
+                            console.error('Error adding item to items: ', error);
+                            Alert.alert('Error', 'Could not add item. Please try again later.');
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                        });
+                }
             } catch (error) {
                 console.error('Error uploading image: ', error);
                 Alert.alert('Error', 'Could not upload image. Please try again later.');
-                return;
+                setLoading(false);
+            }
+        } else {
+            // No image selected
+            if (isDonated) {
+                donatedItemsRef
+                    .add(item)
+                    .then(() => {
+                        console.log('Item added to donated items');
+                        navigation.navigate('DashboardScreen');
+                        Alert.alert('Success', 'Item added to donations!');
+                    })
+                    .catch((error) => {
+                        console.error('Error adding item to donated items: ', error);
+                        Alert.alert('Error', 'Could not add item. Please try again later.');
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            } else {
+                itemsRef
+                    .add(item)
+                    .then(() => {
+                        console.log('Item added to items');
+                        navigation.navigate('DashboardScreen');
+                        Alert.alert('Success', 'Your item was successfully posted!');
+                    })
+                    .catch((error) => {
+                        console.error('Error adding item to items: ', error);
+                        Alert.alert('Error', 'Could not add item. Please try again later.');
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
             }
         }
-
-        if (isDonated) {
-            donatedItemsRef
-                .add(item)
-                .then(() => {
-                    console.log('Item added to donated items');
-
-                    navigation.navigate('DashboardScreen');
-                    Alert.alert('Success', 'Item added to donations!');
-                })
-                .catch((error) => {
-                    console.error('Error adding item to donated items: ', error);
-
-                    Alert.alert('Error', 'Could not add item. Please try again later.');
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        } else {
-            itemsRef
-                .add(item)
-                .then(() => {
-                    console.log('Item added to items');
-
-                    navigation.navigate('DashboardScreen');
-                    Alert.alert('Success', 'Your item was successfully posted!');
-                })
-                .catch((error) => {
-                    console.error('Error adding item to items: ', error);
-
-                    Alert.alert('Error', 'Could not add item. Please try again later.');
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
     };
+
     return (
         <NativeBaseProvider theme={theme}>
             <Box flex={1} p={4} justifyContent="center" alignItems="center">
