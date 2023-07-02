@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
-import * as firebase from '../database/firebase';
+import firebase from '../database/firebase';
 // import { Checkbox } from 'galio-framework';
 import { useFonts } from 'expo-font';
 // import * as ImagePicker from 'expo-image-picker';
@@ -183,23 +183,23 @@ const Sell = ({ navigation }) => {
                     <Heading mb={4} fontSize="4xl">Sell Your Item</Heading>
                     <Text fontSize="lg" mb={4}>List your item to sell in just a few steps. Just enter the following details!</Text>
                     <Box mb={2}>
-                        <Input placeholder="Full Name" fontSize="md" />
+                        <Input placeholder="Title" fontSize="md" value={title} onChangeText={(val) => updateInputVal(val, 'title')} />
                     </Box>
                     <Box mb={2}>
-                        <Input placeholder="Description" multiline minHeight={120} textAlignVertical="top" fontSize="md" />
+                        <Input placeholder="Description" multiline minHeight={120} textAlignVertical="top" fontSize="md" value={description} onChangeText={(val) => updateInputVal(val, 'description')} />
                     </Box>
                     <Box mb={2}>
-                        <Input placeholder="Phone Number" fontSize="md" />
+                        <Input placeholder="Phone Number" fontSize="md" value={phone} onChangeText={(val) => updateInputVal(val, 'phone')} />
                     </Box>
 
                     <Flex direction="row" alignItems="center" justifyContent="space-between" mb={4}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Checkbox value="donate" colorScheme="primary" accessibilityLabel="Donated Items" size="md" />
+                            <Checkbox value="donate" colorScheme="primary" accessibilityLabel="Donated Items" size="md" onChange={(isChecked) => setIsDonated(isChecked)} />
                             <Text ml={2} fontSize="md">Donated Items</Text>
                         </View>
                         <Link _text={{ fontSize: "md" }}>Attach Image</Link>
                     </Flex>
-                    <Button size="lg" mb={4}>
+                    <Button size="lg" mb={4} onPress={() => sellItem()}>
                         <Text style={{ fontSize: 18, color: 'white' }}>Post Item</Text>
                     </Button>
                 </View>
