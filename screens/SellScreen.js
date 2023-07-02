@@ -4,8 +4,9 @@ import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
-import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center } from 'native-base';
+import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner } from 'native-base';
 const Sell = ({ navigation }) => {
+    const [loading, setLoading] = useState(false);
     const theme = extendTheme({
         fonts: {
             heading: 'Raleway',
@@ -90,6 +91,7 @@ const Sell = ({ navigation }) => {
     };
 
     const sellItem = async () => {
+        setLoading(true);
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
         const donatedItemsRef = firebase.firestore().collection('donatedItems');
@@ -100,6 +102,7 @@ const Sell = ({ navigation }) => {
             phone: phone,
             isDonated: isDonated,
             userID: userID,
+            imageURL: null,
         };
         if (image) {
             try {
@@ -125,6 +128,9 @@ const Sell = ({ navigation }) => {
                     console.error('Error adding item to donated items: ', error);
 
                     Alert.alert('Error', 'Could not add item. Please try again later.');
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         } else {
             itemsRef
@@ -139,6 +145,9 @@ const Sell = ({ navigation }) => {
                     console.error('Error adding item to items: ', error);
 
                     Alert.alert('Error', 'Could not add item. Please try again later.');
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
     };
@@ -180,27 +189,33 @@ const Sell = ({ navigation }) => {
                         </Box>
                     )}
 
-                    <Center>
-                        <Box height={60} width="100%" mb={4}>
-                            <TouchableOpacity onPress={sellItem} activeOpacity={0.7}>
-                                <Box
-                                    bg="black"
-                                    py={4}
-                                    px={6}
-                                    borderRadius="md"
-                                    alignItems="center"
-                                    width="100%"
-                                    _hover={{
-                                        bg: 'gray.700',
-                                    }}
-                                >
-                                    <Text color="white" fontSize={18}>
-                                        Post Item
-                                    </Text>
-                                </Box>
-                            </TouchableOpacity>
-                        </Box>
-                    </Center>
+                    {loading ? (
+                        <Center flex={1}>
+                            <Spinner accessibilityLabel="Loading" />
+                        </Center>
+                    ) : (
+                        <Center>
+                            <Box height={60} width="100%" mb={4}>
+                                <TouchableOpacity onPress={sellItem} activeOpacity={0.7}>
+                                    <Box
+                                        bg="black"
+                                        py={4}
+                                        px={6}
+                                        borderRadius="md"
+                                        alignItems="center"
+                                        width="100%"
+                                        _hover={{
+                                            bg: 'gray.700',
+                                        }}
+                                    >
+                                        <Text color="white" fontSize={18}>
+                                            Post Item
+                                        </Text>
+                                    </Box>
+                                </TouchableOpacity>
+                            </Box>
+                        </Center>
+                    )}
                 </View>
             </Box>
         </NativeBaseProvider>
