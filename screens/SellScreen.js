@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
@@ -17,6 +17,9 @@ const Sell = ({ navigation }) => {
                 baseStyle: {
                     _pressed: {
                         bg: 'black',
+                    },
+                    _hover: {
+                        bg: 'gray.900',
                     },
                 },
                 variants: {
@@ -77,7 +80,6 @@ const Sell = ({ navigation }) => {
     };
 
     const sellItem = () => {
-        setIsLoading(true);
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
         const donatedItemsRef = firebase.firestore().collection('donatedItems');
@@ -95,13 +97,13 @@ const Sell = ({ navigation }) => {
                 .add(item)
                 .then(() => {
                     console.log('Item added to donated items');
-                    setIsLoading(false);
+
                     navigation.navigate('DashboardScreen');
-                    Alert.alert('Success', 'Item added to Donations');
+                    Alert.alert('Success', 'Item added to donations!');
                 })
                 .catch((error) => {
                     console.error('Error adding item to donated items: ', error);
-                    setIsLoading(false);
+
                     Alert.alert('Error', 'Could not add item. Please try again later.');
                 });
         } else {
@@ -109,13 +111,13 @@ const Sell = ({ navigation }) => {
                 .add(item)
                 .then(() => {
                     console.log('Item added to items');
-                    setIsLoading(false);
+
                     navigation.navigate('DashboardScreen');
-                    Alert.alert('Success', 'Item added to Buy Items.');
+                    Alert.alert('Success', 'Your item was successfully posted!');
                 })
                 .catch((error) => {
                     console.error('Error adding item to items: ', error);
-                    setIsLoading(false);
+
                     Alert.alert('Error', 'Could not add item. Please try again later.');
                 });
         }
@@ -160,9 +162,23 @@ const Sell = ({ navigation }) => {
 
                     <Center>
                         <Box height={60} width="100%" mb={4}>
-                            <Button flex={1} size="lg" onPress={() => sellItem()}>
-                                <Text style={{ fontSize: 18, color: 'white' }}>Post Item</Text>
-                            </Button>
+                            <TouchableOpacity onPress={sellItem} activeOpacity={0.7}>
+                                <Box
+                                    bg="black"
+                                    py={4}
+                                    px={6}
+                                    borderRadius="md"
+                                    alignItems="center"
+                                    width="100%"
+                                    _hover={{
+                                        bg: 'gray.700',
+                                    }}
+                                >
+                                    <Text color="white" fontSize={18}>
+                                        Post Item
+                                    </Text>
+                                </Box>
+                            </TouchableOpacity>
                         </Box>
                     </Center>
                 </View>
