@@ -6,7 +6,7 @@ import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import SellScreen from './screens/SellScreen'
-
+import BuyScreen from './screens/BuyScreen'
 const Stack = createStackNavigator();
 
 function App() {
@@ -35,6 +35,9 @@ function App() {
         />
         <Stack.Screen name="SellScreen"
           component={SellScreen}
+          options={{ title: '' }} />
+        <Stack.Screen name="BuyScreen"
+          component={BuyScreen}
           options={{ title: '' }} />
 
       </Stack.Navigator>
