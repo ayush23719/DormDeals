@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
-import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner } from 'native-base';
+import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner, InputLeftAddon } from 'native-base';
 const Sell = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const theme = extendTheme({
@@ -46,6 +46,7 @@ const Sell = ({ navigation }) => {
     });
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [price, setPrice] = useState('');
     const [phone, setPhone] = useState('');
     const [isDonated, setIsDonated] = useState(false);
     const [image, setImage] = useState(null);
@@ -54,6 +55,9 @@ const Sell = ({ navigation }) => {
             setTitle(val);
         } else if (prop === 'phone') {
             setPhone(val);
+        }
+        else if (prop === 'price') {
+            setPrice(val);
         }
         else {
             setDescription(val);
@@ -108,6 +112,7 @@ const Sell = ({ navigation }) => {
             phone: phone,
             isDonated: isDonated,
             userID: userID,
+            price: price,
         };
 
         if (image) {
@@ -187,72 +192,77 @@ const Sell = ({ navigation }) => {
         }
     };
 
+
     return (
         <NativeBaseProvider theme={theme}>
             <Box flex={1} p={4} justifyContent="center" alignItems="center">
-                <View style={{ flex: 1, width: '100%', paddingTop: 20, paddingBottom: 20 }}>
-                    <Heading mb={4} fontSize="4xl">
-                        Sell Your Item
-                    </Heading>
-                    <Text fontSize="lg" mb={4}>
-                        List your item to sell in just a few steps. Just enter the following details!
-                    </Text>
-                    <Box mb={2}>
-                        <Input placeholder="Title" fontSize="md" value={title} onChangeText={(val) => updateInputVal(val, 'title')} />
-                    </Box>
-                    <Box mb={2}>
-                        <Input placeholder="Description" multiline minHeight={120} textAlignVertical="top" fontSize="md" value={description} onChangeText={(val) => updateInputVal(val, 'description')} />
-                    </Box>
-                    <Box mb={2}>
-                        <Input placeholder="Phone Number" fontSize="md" value={phone} onChangeText={(val) => updateInputVal(val, 'phone')} />
-                    </Box>
-
-                    <Flex direction="row" alignItems="center" justifyContent="space-between" mb={4}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Checkbox value="donate" colorScheme="primary" accessibilityLabel="Donated Items" size="md" onChange={(isChecked) => setIsDonated(isChecked)} />
-                            <Text ml={2} fontSize="md">
-                                Donate Item
-                            </Text>
-                        </View>
-                        <Link _text={{ fontSize: 'md' }} onPress={pickImage}>
-                            Attach Image
-                        </Link>
-                    </Flex>
-
-                    {image && (
-                        <Box alignItems="center" mb={4}>
-                            <Image source={{ uri: image }} style={{ width: 300, height: 150 }} />
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={{ flex: 1, width: '100%', paddingTop: 20, paddingBottom: 20 }}>
+                        <Heading mb={4} fontSize="4xl">
+                            Sell Your Item
+                        </Heading>
+                        <Text fontSize="lg" mb={4}>
+                            List your item to sell in just a few steps. Just enter the following details!
+                        </Text>
+                        <Box mb={2}>
+                            <Input placeholder="Title" fontSize="md" value={title} onChangeText={(val) => updateInputVal(val, 'title')} />
                         </Box>
-                    )}
+                        <Box mb={2}>
+                            <Input placeholder="Description" multiline minHeight={120} textAlignVertical="top" fontSize="md" value={description} onChangeText={(val) => updateInputVal(val, 'description')} />
+                        </Box>
+                        <Box mb={2} flexDirection="row" alignItems="center">
+                            <InputLeftAddon children="Rupees (₹)" width="30%" height={50} />
+                            <Input flex={1} placeholder="Price" fontSize="md" height={50} value={price} onChangeText={(val) => updateInputVal(val, 'price')} />
+                        </Box>
+                        <Box mb={2}>
+                            <Input placeholder="Phone Number" fontSize="md" value={phone} onChangeText={(val) => updateInputVal(val, 'phone')} />
+                        </Box>
 
-                    {loading ? (
-                        <Center flex={1}>
-                            <Spinner accessibilityLabel="Loading" />
-                        </Center>
-                    ) : (
-                        <Center>
-                            <Box height={60} width="100%" mb={4}>
-                                <TouchableOpacity onPress={sellItem} activeOpacity={0.7}>
-                                    <Box
-                                        bg="black"
-                                        py={4}
-                                        px={6}
-                                        borderRadius="md"
-                                        alignItems="center"
-                                        width="100%"
-                                        _hover={{
-                                            bg: 'gray.700',
-                                        }}
-                                    >
-                                        <Text color="white" fontSize={18}>
-                                            Post Item
-                                        </Text>
-                                    </Box>
-                                </TouchableOpacity>
+                        <Flex direction="row" alignItems="center" justifyContent="space-between" mb={4}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Checkbox value="donate" colorScheme="primary" accessibilityLabel="Donated Items" size="md" onChange={(isChecked) => setIsDonated(isChecked)} />
+                                <Text ml={2} fontSize="md">
+                                    Donate Item
+                                </Text>
+                            </View>
+                            <Link _text={{ fontSize: 'md' }} onPress={pickImage}>
+                                Attach Image
+                            </Link>
+                        </Flex>
+                        {image && (
+                            <Box alignItems="center" mb={4}>
+                                <Image source={{ uri: image }} style={{ width: 300, height: 150 }} />
                             </Box>
-                        </Center>
-                    )}
-                </View>
+                        )}
+                        {loading ? (
+                            <Center flex={1}>
+                                <Spinner accessibilityLabel="Loading" />
+                            </Center>
+                        ) : (
+                            <Center>
+                                <Box height={60} width="100%" mb={4}>
+                                    <TouchableOpacity onPress={sellItem} activeOpacity={0.7}>
+                                        <Box
+                                            bg="black"
+                                            py={4}
+                                            px={6}
+                                            borderRadius="md"
+                                            alignItems="center"
+                                            width="100%"
+                                            _hover={{
+                                                bg: 'gray.700',
+                                            }}
+                                        >
+                                            <Text color="white" fontSize={18}>
+                                                Post Item
+                                            </Text>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </Center>
+                        )}
+                    </View>
+                </ScrollView>
             </Box>
         </NativeBaseProvider>
     );
