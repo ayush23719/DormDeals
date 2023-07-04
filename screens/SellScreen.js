@@ -101,6 +101,19 @@ const Sell = ({ navigation }) => {
     };
 
     const sellItem = async () => {
+        if (!title || !description || !phone) {
+            Alert.alert('Error', 'Please fill in all the required fields.');
+            return;
+        }
+        if (!image) {
+            Alert.alert('Error', 'Please upload an image.');
+            return;
+        }
+
+        if (!isDonated && !price) {
+            Alert.alert('Error', 'Please fill in the price field.');
+            return;
+        }
         setLoading(true);
         const userID = firebase.auth().currentUser.uid;
         const itemsRef = firebase.firestore().collection('items');
@@ -212,7 +225,7 @@ const Sell = ({ navigation }) => {
                         </Box>
                         <Box mb={2} flexDirection="row" alignItems="center">
                             <InputLeftAddon children="Rupees (₹)" width="30%" height={50} />
-                            <Input flex={1} placeholder="Price" fontSize="md" height={50} value={price} onChangeText={(val) => updateInputVal(val, 'price')} />
+                            <Input flex={1} placeholder="Price" fontSize="md" height={50} value={price} onChangeText={(val) => updateInputVal(val, 'price')} isDisabled={isDonated} />
                         </Box>
                         <Box mb={2}>
                             <Input placeholder="Phone Number" fontSize="md" value={phone} onChangeText={(val) => updateInputVal(val, 'phone')} />

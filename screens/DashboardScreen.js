@@ -43,7 +43,7 @@ const Dashboard = ({ navigation }) => {
                         <Text style={styles.sellText}>Sell Items</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.donations}>
-                        <Text style={styles.donateText}>Donations</Text>
+                        <Text style={styles.donateText} onPress={() => navigation.navigate('DonateScreen')}>Donations</Text>
                     </TouchableOpacity>
                 </View>
             </View>
