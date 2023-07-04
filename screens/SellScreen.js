@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
-import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner, InputLeftAddon } from 'native-base';
+import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner, InputLeftAddon, Alert, IconButton, CloseIcon, HStack } from 'native-base';
 const Sell = ({ navigation }) => {
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertDescription, setAlertDescription] = useState('');
+    const [alertStatus, setAlertStatus] = useState('info');
+
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
+    };
+
+
     const [loading, setLoading] = useState(false);
+    const cancelRef = useRef();
     const theme = extendTheme({
         fonts: {
             heading: 'Raleway',
@@ -102,16 +115,25 @@ const Sell = ({ navigation }) => {
 
     const sellItem = async () => {
         if (!title || !description || !phone) {
-            Alert.alert('Error', 'Please fill in all the required fields.');
+            setAlertTitle('Error');
+            setAlertDescription('Please fill in all the required fields.');
+            setAlertStatus('error');
+            setShowAlert(true);
             return;
         }
         if (!image) {
-            Alert.alert('Error', 'Please upload an image.');
+            setAlertTitle('Error');
+            setAlertDescription('Please upload an image.');
+            setAlertStatus('error');
+            setShowAlert(true);
             return;
         }
 
         if (!isDonated && !price) {
-            Alert.alert('Error', 'Please fill in the price field.');
+            setAlertTitle('Error');
+            setAlertDescription('Please fill in the price field.');
+            setAlertStatus('error');
+            setShowAlert(true);
             return;
         }
         setLoading(true);
@@ -138,12 +160,15 @@ const Sell = ({ navigation }) => {
                         .add(item)
                         .then(() => {
                             console.log('Item added to donated items');
+                            setShowAlert(true);
+                            setAlertStatus('success');
+                            setAlertDescription('Your item was successfully posted!');
                             navigation.navigate('DashboardScreen');
-                            Alert.alert('Success', 'Item added to donations!');
                         })
                         .catch((error) => {
                             console.error('Error adding item to donated items: ', error);
-                            Alert.alert('Error', 'Could not add item. Please try again later.');
+                            setShowAlert(true);
+                            setAlertDescription('Error adding item to donated items. Please try again later.');
                         })
                         .finally(() => {
                             setLoading(false);
@@ -153,12 +178,16 @@ const Sell = ({ navigation }) => {
                         .add(item)
                         .then(() => {
                             console.log('Item added to items');
+                            setShowAlert(true);
+                            setAlertStatus('success');
+                            setAlertDescription('Your item was successfully posted!');
                             navigation.navigate('DashboardScreen');
-                            Alert.alert('Success', 'Your item was successfully posted!');
                         })
                         .catch((error) => {
                             console.error('Error adding item to items: ', error);
-                            Alert.alert('Error', 'Could not add item. Please try again later.');
+                            setShowAlert(true);
+                            setAlertStatus('error');
+                            setAlertDescription('Error posting your item. Please try again later.');
                         })
                         .finally(() => {
                             setLoading(false);
@@ -166,7 +195,8 @@ const Sell = ({ navigation }) => {
                 }
             } catch (error) {
                 console.error('Error uploading image: ', error);
-                Alert.alert('Error', 'Could not upload image. Please try again later.');
+                setShowAlert(true);
+                setAlertDescription('Error uploading image. Please try again later.');
                 setLoading(false);
             }
         } else {
@@ -176,12 +206,18 @@ const Sell = ({ navigation }) => {
                     .add(item)
                     .then(() => {
                         console.log('Item added to donated items');
+
+                        setShowAlert(true);
+                        setAlertStatus('success');
+                        setAlertDescription('Item added to donations!');
                         navigation.navigate('DashboardScreen');
-                        Alert.alert('Success', 'Item added to donations!');
+
                     })
                     .catch((error) => {
                         console.error('Error adding item to donated items: ', error);
-                        Alert.alert('Error', 'Could not add item. Please try again later.');
+                        setShowAlert(true);
+                        setAlertStatus('error');
+                        setAlertDescription('Error adding item to donated items. Please try again later.');
                     })
                     .finally(() => {
                         setLoading(false);
@@ -191,12 +227,17 @@ const Sell = ({ navigation }) => {
                     .add(item)
                     .then(() => {
                         console.log('Item added to items');
+
+                        setShowAlert(true);
+                        setAlertStatus('success');
+                        setAlertDescription('Your item was successfully posted!');
                         navigation.navigate('DashboardScreen');
-                        Alert.alert('Success', 'Your item was successfully posted!');
                     })
                     .catch((error) => {
                         console.error('Error adding item to items: ', error);
-                        Alert.alert('Error', 'Could not add item. Please try again later.');
+                        setShowAlert(true);
+                        setAlertStatus('error');
+                        setAlertDescription('Error posting your item. Please try again later.');
                     })
                     .finally(() => {
                         setLoading(false);
@@ -277,7 +318,25 @@ const Sell = ({ navigation }) => {
                     </View>
                 </ScrollView>
             </Box>
-        </NativeBaseProvider>
+            {showAlert && (
+                <Alert status={alertStatus} onClose={handleAlertClose} variant="left-accent">
+                    <HStack flexShrink={1} space={2} justifyContent="space-between">
+                        <HStack space={2} flexShrink={1}>
+                            <Alert.Icon mt="1" />
+                            <Text fontSize="md" color="coolGray.800">
+                                {alertDescription}
+                            </Text>
+                        </HStack>
+                        <IconButton variant="unstyled" _focus={{
+                            borderWidth: 0
+                        }} icon={<CloseIcon size="3" />} _icon={{
+                            color: "coolGray.600"
+                        }} onPress={handleAlertClose} />
+                    </HStack>
+                </Alert>
+            )
+            }
+        </NativeBaseProvider >
     );
 };
 export default Sell;
