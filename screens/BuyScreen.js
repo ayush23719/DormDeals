@@ -20,6 +20,7 @@ const Buy = () => {
             body: 'Raleway',
         },
     });
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -98,7 +99,7 @@ const Buy = () => {
                 <Box pl={4} pr={-10} pt={4}>
                     <Box ml={-1}>
                         <Heading mb={4} fontSize="4xl" textAlign="left" ml={-5}>
-                            Buy Items
+                            Explore Items
                         </Heading>
                         <Text fontSize="lg" mb={4} textAlign="left" ml={-5}>
                             Explore a wide range of items available for purchase.

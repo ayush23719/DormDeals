@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
                     setEmail('');
                     setPassword('');
                     setIsLoading(false);
-                    navigation.navigate('DashboardScreen');
+                    navigation.navigate('TabNavigator');
                 })
                 .catch((error) => {
                     setIsLoading(false);

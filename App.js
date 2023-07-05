@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import StarterScreen from './screens/StarterScreen';
 import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
+import TabNavigator from './screens/TabNavigator'
 import DashboardScreen from './screens/DashboardScreen'
 import SellScreen from './screens/SellScreen'
 import BuyScreen from './screens/BuyScreen'
@@ -30,10 +31,15 @@ function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="DashboardScreen"
-          component={DashboardScreen}
+          name="TabNavigator"
+          component={TabNavigator}
           options={{ headerShown: false }}
         />
+        {/* <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ headerShown: false }}
+        /> */}
         <Stack.Screen name="SellScreen"
           component={SellScreen}
           options={{ title: '' }} />
