@@ -253,7 +253,7 @@ const Sell = ({ navigation }) => {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ flex: 1, width: '100%', paddingTop: 20, paddingBottom: 20 }}>
                         <Heading mb={4} fontSize="4xl">
-                            Post Your Item
+                            Sell Your Item
                         </Heading>
                         <Text fontSize="lg" mb={4}>
                             List your item to sell in just a few steps. Just enter the following details!

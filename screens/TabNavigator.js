@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5 } from 'react-native-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Dashboard from './DashboardScreen';
 import BuyScreen from './BuyScreen';
 import SellScreen from './SellScreen';
@@ -14,23 +14,23 @@ const TabNavigator = () => {
                 let iconName;
 
                 if (route.name === 'Home') {
-                    iconName = 'home'; // Set the icon name for the Home tab
+                    iconName = 'home-outline';
                 } else if (route.name === 'Buy') {
-                    iconName = 'shopping-cart'; // Set the icon name for the Profile tab
+                    iconName = 'cart-outline';
                 }
-                else if (route.name === 'Sell') {
-                    iconName = 'dollar-sign'; // Set the icon name for the Profile tab
+                else if (route.name === 'Add') {
+                    iconName = 'add-circle-outline';
                 }
                 else if (route.name === 'Donations') {
-                    iconName = 'hand-holding-heart'; // Set the icon name for the Profile tab
+                    iconName = 'heart-outline';
                 }
 
-                return <FontAwesome5 name={iconName} size={size} color={color} />;
+                return <Ionicons name={iconName} size={size} color={color} />;
             },
         })}>
             <Tab.Screen name="Home" component={Dashboard} />
             <Tab.Screen name="Buy" component={BuyScreen} />
-            <Tab.Screen name="Sell" component={SellScreen} />
+            <Tab.Screen name="Add" component={SellScreen} />
             <Tab.Screen name="Donations" component={DonateScreen} />
         </Tab.Navigator>
     );
