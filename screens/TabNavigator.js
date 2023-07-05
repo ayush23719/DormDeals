@@ -5,6 +5,7 @@ import Dashboard from './DashboardScreen';
 import BuyScreen from './BuyScreen';
 import SellScreen from './SellScreen';
 import DonateScreen from './DonateScreen';
+import Profile from './ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -24,6 +25,9 @@ const TabNavigator = () => {
                 else if (route.name === 'Donations') {
                     iconName = 'heart-outline';
                 }
+                else if (route.name === 'Profile') {
+                    iconName = 'person-outline';
+                }
 
                 return <Ionicons name={iconName} size={size} color={color} />;
             },
@@ -32,6 +36,7 @@ const TabNavigator = () => {
             <Tab.Screen name="Buy" component={BuyScreen} />
             <Tab.Screen name="Add" component={SellScreen} />
             <Tab.Screen name="Donations" component={DonateScreen} />
+            <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );
 };

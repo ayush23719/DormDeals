@@ -5,7 +5,6 @@ import StarterScreen from './screens/StarterScreen';
 import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
 import TabNavigator from './screens/TabNavigator'
-import DashboardScreen from './screens/DashboardScreen'
 import SellScreen from './screens/SellScreen'
 import BuyScreen from './screens/BuyScreen'
 import DonateScreen from './screens/DonateScreen'
@@ -35,11 +34,6 @@ function App() {
           component={TabNavigator}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
-          name="Dashboard"
-          component={DashboardScreen}
-          options={{ headerShown: false }}
-        /> */}
         <Stack.Screen name="SellScreen"
           component={SellScreen}
           options={{ title: '' }} />

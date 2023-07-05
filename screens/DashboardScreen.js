@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import PieChart from 'react-native-pie-chart';
-import { NativeBaseProvider, extendTheme, Heading } from 'native-base';
+import { NativeBaseProvider, extendTheme, Heading, IconButton } from 'native-base';
 
 const Dashboard = () => {
     const theme = extendTheme({
@@ -70,6 +70,7 @@ const Dashboard = () => {
 
     // Check if data has been fetched
     const isDataFetched = totalItems !== 0;
+
 
     return (
         <NativeBaseProvider theme={theme}>

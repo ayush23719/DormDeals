@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import firebase from '../database/firebase';
 import { useFonts } from 'expo-font';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
-import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Button, Box, Flex, Center, Spinner, InputLeftAddon, Alert, IconButton, CloseIcon, HStack } from 'native-base';
+import { NativeBaseProvider, extendTheme, Heading, Text, Checkbox, Link, Input, Box, Flex, Center, Spinner, InputLeftAddon, Alert, IconButton, CloseIcon, HStack } from 'native-base';
 const Sell = ({ navigation }) => {
 
     const [showAlert, setShowAlert] = useState(false);
