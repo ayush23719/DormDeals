@@ -1,11 +1,17 @@
-import { React, useCallback } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { React, useCallback, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { useFonts } from 'expo-font';
 import Icon from "react-native-dynamic-vector-icons";
 import { SvgXml } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 export default function StarterScreen() {
-
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            // Prevent navigating back to the LaunchScreen
+            return true;
+        });
+        return () => backHandler.remove();
+    }, []);
     const navigation = useNavigation();
     const handleGetStarted = () => {
         navigation.navigate('SignupScreen');
@@ -36,7 +42,7 @@ export default function StarterScreen() {
                 Welcome To DormDeals
             </Text>
             <Text style={styles.description}>
-                Buy, Sell or Donate your old hostel stuff with just a few clicks. It's that easy!
+                Buy, Sell or Donate your old hostel stuff in just a few steps. It's that easy!
             </Text>
             <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
                 <Text style={styles.buttonText}>Get Started</Text>
@@ -55,7 +61,7 @@ export default function StarterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#D4ED26',
+        backgroundColor: '#fff',
         justifyContent: 'center',
         padding: 40,
     },
