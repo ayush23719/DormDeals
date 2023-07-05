@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from '../database/firebase';
-import { Alert, Input, HStack, IconButton, CloseIcon, NativeBaseProvider } from 'native-base';
+import { Alert, Input, HStack, IconButton, CloseIcon, NativeBaseProvider, extendTheme } from 'native-base';
 
 const Profile = ({ navigation }) => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertDescription, setAlertDescription] = useState('');
     const [alertStatus, setAlertStatus] = useState('info');
+
 
 
     const handleAlertClose = () => {
@@ -17,6 +18,14 @@ const Profile = ({ navigation }) => {
     const [fontsLoaded] = useFonts({
         Raleway: require('../assets/fonts/static/Raleway-Regular.ttf'),
     });
+
+    const theme = extendTheme({
+        fonts: {
+            heading: 'Raleway',
+            body: 'Raleway',
+        },
+    });
+
 
     const [newName, setNewName] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -71,11 +80,11 @@ const Profile = ({ navigation }) => {
     };
 
     if (!fontsLoaded) {
-        return null; // You can render a loading spinner here while the fonts are being loaded
+        return null;
     }
 
     return (
-        <NativeBaseProvider>
+        <NativeBaseProvider theme={theme}>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.headingContainer}>
                     <Text style={styles.headingText}>Edit Your Profile</Text>
