@@ -163,7 +163,10 @@ const Sell = ({ navigation }) => {
                             setShowAlert(true);
                             setAlertStatus('success');
                             setAlertDescription('Your item was successfully posted!');
-                            navigation.navigate('DashboardScreen');
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'TabNavigator' }],
+                            });
                         })
                         .catch((error) => {
                             console.error('Error adding item to donated items: ', error);
@@ -181,7 +184,10 @@ const Sell = ({ navigation }) => {
                             setShowAlert(true);
                             setAlertStatus('success');
                             setAlertDescription('Your item was successfully posted!');
-                            navigation.navigate('DashboardScreen');
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'TabNavigator' }],
+                            });
                         })
                         .catch((error) => {
                             console.error('Error adding item to items: ', error);
@@ -206,11 +212,13 @@ const Sell = ({ navigation }) => {
                     .add(item)
                     .then(() => {
                         console.log('Item added to donated items');
-
                         setShowAlert(true);
                         setAlertStatus('success');
                         setAlertDescription('Item added to donations!');
-                        navigation.navigate('DashboardScreen');
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'TabNavigator' }],
+                        });
 
                     })
                     .catch((error) => {
@@ -227,11 +235,13 @@ const Sell = ({ navigation }) => {
                     .add(item)
                     .then(() => {
                         console.log('Item added to items');
-
                         setShowAlert(true);
                         setAlertStatus('success');
                         setAlertDescription('Your item was successfully posted!');
-                        navigation.navigate('DashboardScreen');
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'TabNavigator' }],
+                        });
                     })
                     .catch((error) => {
                         console.error('Error adding item to items: ', error);

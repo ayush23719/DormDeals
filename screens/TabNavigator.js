@@ -27,7 +27,7 @@ const TabNavigator = () => {
 
                 return <Ionicons name={iconName} size={size} color={color} />;
             },
-        })}>
+        })} initialRouteName='Home'>
             <Tab.Screen name="Home" component={Dashboard} />
             <Tab.Screen name="Buy" component={BuyScreen} />
             <Tab.Screen name="Add" component={SellScreen} />
