@@ -23,7 +23,7 @@
     "android": {
       "package": "com.ayush23719.dormdeals",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app_icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
