@@ -42,15 +42,17 @@ const Dashboard = () => {
         const nameArray = fullName.split(' ');
         const firstName = nameArray[0];
         setFirstName(firstName);
+        // Fetch data from Firebase to calculate the stats 
+        const itemsRef = firebase
+            .firestore()
+            .collection('items')
+            .where('userID', '==', user.uid);
+        const donatedItemsRef = firebase
+            .firestore()
+            .collection('donatedItems')
+            .where('userID', '==', user.uid); // Filter items by user ID
 
-        // Fetch data from Firebase to calculate the stats
-        const itemsRef = firebase.firestore().collection('items');
-        const donatedItemsRef = firebase.firestore().collection('donatedItems');
-
-        Promise.all([
-            donatedItemsRef.get(),
-            itemsRef.get(),
-        ])
+        Promise.all([donatedItemsRef.get(), itemsRef.get()])
             .then(([donatedItemsSnapshot, itemsSnapshot]) => {
                 const donationItems = donatedItemsSnapshot.size;
                 const sellingItems = itemsSnapshot.size;
@@ -62,6 +64,7 @@ const Dashboard = () => {
                 console.log('Error fetching data:', error);
             });
     }, []);
+
 
     const chart_wh = 300;
 

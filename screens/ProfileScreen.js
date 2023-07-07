@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from '../database/firebase';
-import { Alert, Input, HStack, IconButton, CloseIcon, NativeBaseProvider, extendTheme } from 'native-base';
-
+import { Alert, Input, HStack, IconButton, CloseIcon, NativeBaseProvider, extendTheme, Box, AspectRatio, Image, Heading } from 'native-base';
 const Profile = ({ navigation }) => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertDescription, setAlertDescription] = useState('');
     const [alertStatus, setAlertStatus] = useState('info');
-
-
-
+    const [userItems, setUserItems] = useState([]);
     const handleAlertClose = () => {
         setShowAlert(false);
     };
@@ -71,12 +68,67 @@ const Profile = ({ navigation }) => {
             .signOut()
             .then(() => {
                 // Sign out successful
-                navigation.navigate('LoginScreen');
+                console.log('User signed out!');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'LoginScreen' }],
+                });
             })
             .catch((error) => {
                 // An error occurred
                 console.log('Error logging out:', error);
             });
+    };
+
+    useEffect(() => {
+        // Fetch the user's items from the database
+        const userId = firebase.auth().currentUser.uid;
+        const itemsRef = firebase.firestore().collection('items');
+        const donatedItemsRef = firebase.firestore().collection('donatedItems');
+
+        const fetchData = async () => {
+            try {
+                const userItemsSnapshot = await itemsRef.where('userID', '==', userId).get();
+                const userDonatedItemsSnapshot = await donatedItemsRef.where('userID', '==', userId).get();
+                const userItemsData = userItemsSnapshot.docs.map((doc) => ({
+                    itemId: doc.id,
+                    ...doc.data(),
+                }));
+                const userDonatedItemsData = userDonatedItemsSnapshot.docs.map((doc) => ({
+                    itemId: doc.id,
+                    ...doc.data(),
+                }));
+                setUserItems([...userItemsData, ...userDonatedItemsData]);
+            } catch (error) {
+                console.log('Error fetching user items:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleDeleteItem = (itemId) => {
+        const itemRef = firebase.firestore().collection('items').doc(itemId);
+        const donatedItemRef = firebase.firestore().collection('donatedItems').doc(itemId);
+
+        // Delete the item from both 'items' and 'donatedItems' collections
+        const deleteItem = async () => {
+            try {
+                await itemRef.delete();
+                await donatedItemRef.delete();
+                const updatedUserItems = userItems.filter((item) => item.itemId !== itemId);
+                setUserItems(updatedUserItems);
+                console.log('Item deleted successfully!');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'TabNavigator' }],
+                });
+            } catch (error) {
+                console.log('Error deleting item:', error);
+            }
+        };
+
+        deleteItem();
     };
 
     if (!fontsLoaded) {
@@ -131,6 +183,31 @@ const Profile = ({ navigation }) => {
                     </Alert>
                 )
                 }
+                <View style={styles.userItemsContainer}>
+                    <Text style={styles.userItemsTitle}>Your Items:</Text>
+                    {userItems.map((item) => (
+                        <Box key={item.itemId} style={styles.userItemCard}>
+                            <Box>
+                                <AspectRatio w="100%" ratio={16 / 9}>
+                                    <Image source={{ uri: item.imageURL }} alt="image" />
+                                </AspectRatio>
+                                <Box p="4" space={3}>
+                                    <Heading size="md" ml="-1">
+                                        {item.title}
+                                    </Heading>
+
+                                    <Text fontWeight="400">{item.description}</Text>
+                                </Box>
+                            </Box>
+                            <TouchableOpacity
+                                style={styles.deleteButton}
+                                onPress={() => handleDeleteItem(item.itemId)}
+                            >
+                                <Text style={styles.deleteButtonText}>Delete</Text>
+                            </TouchableOpacity>
+                        </Box>
+                    ))}
+                </View>
             </ScrollView>
         </NativeBaseProvider>
     );
@@ -195,6 +272,36 @@ const styles = StyleSheet.create({
     logoutText: {
         fontFamily: 'Raleway',
         fontSize: 16,
+    },
+    userItemsContainer: {
+        marginBottom: 20,
+
+    },
+    userItemsTitle: {
+        fontFamily: 'Raleway',
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    userItemCard: {
+        marginBottom: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'coolGray.600',
+        borderRadius: 5,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderRadius: 5,
+        padding: 10,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    deleteButtonText: {
+        fontFamily: 'Raleway',
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
     },
 });
 
