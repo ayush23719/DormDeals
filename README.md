@@ -7,7 +7,7 @@ DormDeals is a mobile app designed to facilitate the buying and selling of used 
 - **User Authentication:** Students can create an account or log in using their college email address to ensure secure and trusted transactions.
 - **Item Listings:** Users can post items they wish to sell, including details such as item name, description, price, and images.
 - **Notifications:** Users receive notifications for new messages, item inquiries, and updates on their listings.
-- **User Ratings and Reviews:** Buyers and sellers can rate and review each other based on their experience, providing transparency and building trust within the community.
+- **User Statistics:** Users get the stats of their donated/selling items.
 
 ## Technologies Used
 
